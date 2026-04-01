@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Access or Register for KEYJINX Vault" />
+    <title>KEYJINX - Auth</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  </head>
+  <body>
+    <header>
+      <nav>
+          <a href="index.html" class="logo">KEYJINX</a>
+          <div class="hamburger" id="hamburger">
+              <span></span>
+              <span></span>
+              <span></span>
+          </div>
+          
+          <ul class="nav-menu" id="navMenu"></ul>
+      </nav>
+    </header>
+
+    <main class="container content-page">
+      <header class="page-header">
+        <h1 id="pageTitle">
+          <i class="fa-solid fa-fingerprint"></i> VAULT ACCESS
+        </h1>
+      </header>
+
+      <section class="contact-content auth-wrapper">
+        <div id="loginSection" class="auth-card">
+          <form id="loginForm" class="contact-form">
+            <div class="form-group icon-input-group">
+              <label for="loginEmail">Operative Email</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-envelope input-icon"></i>
+                <input
+                  type="email"
+                  id="loginEmail"
+                  placeholder="jinx@gmail.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group icon-input-group">
+              <label for="loginPassword">Master Password</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-key input-icon"></i>
+                <input
+                  type="password"
+                  id="loginPassword"
+                  placeholder="••••••••"
+                  required
+                />
+                <i
+                  class="fa-solid fa-eye toggle-password"
+                  onclick="toggleVisibility('loginPassword', this)"
+                ></i>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              style="width: 100%; margin-top: 15px"
+            >
+              Authenticate <i class="fa-solid fa-bolt"></i>
+            </button>
+          </form>
+
+          <p class="auth-switch-text">
+            Need an access key?
+            <a href="#" id="showRegisterBtn" class="auth-link"
+              >Initialize Protocol.</a
+            >
+          </p>
+        </div>
+
+        <div id="registerSection" class="auth-card" style="display: none">
+          <form id="registerForm" class="contact-form">
+            <div class="form-group icon-input-group">
+              <label for="regEmail">Operative Email</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-envelope input-icon"></i>
+                <input
+                  type="email"
+                  id="regEmail"
+                  placeholder="newjinx@gmail.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group icon-input-group">
+              <label for="regPassword">Master Password</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-shield-halved input-icon"></i>
+                <input
+                  type="password"
+                  id="regPassword"
+                  placeholder="••••••••"
+                  required
+                  minlength="8"
+                  oninput="checkStrength(this.value)"
+                />
+                <i
+                  class="fa-solid fa-eye toggle-password"
+                  onclick="toggleVisibility('regPassword', this)"
+                ></i>
+              </div>
+              <div class="strength-meter-container">
+                <div id="strength-bar" class="strength-bar"></div>
+              </div>
+              <small
+                id="strength-text"
+                style="color: #dff8ff; opacity: 0.7; font-size: 0.8rem"
+                >Awaiting input...</small
+              >
+            </div>
+
+            <div class="form-group icon-input-group">
+              <label for="regConfirmPassword">Confirm Master Password</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-shield-check input-icon"></i>
+                <input
+                  type="password"
+                  id="regConfirmPassword"
+                  placeholder="••••••••"
+                  required
+                  minlength="8"
+                />
+                <i
+                  class="fa-solid fa-eye toggle-password"
+                  onclick="toggleVisibility('regConfirmPassword', this)"
+                ></i>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              style="width: 100%; margin-top: 15px"
+            >
+              Forge Vault Key <i class="fa-solid fa-hammer"></i>
+            </button>
+          </form>
+
+          <p class="auth-switch-text">
+            Already have an access key?
+            <a href="#" id="showLoginBtn" class="auth-link">Log in here.</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast"></div>
+
+    <footer class="site-footer">
+      <p>&copy; 2026 KEYJINX. All rights reserved.</p>
+    </footer>
+
+    <script src="js/navbar.js"></script>
+    <script src="js/auth.js"></script>
+
+    <script>
+      // Toggle Password Visibility
+      function toggleVisibility(inputId, iconElement) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+          input.type = "text";
+          iconElement.classList.remove("fa-eye");
+          iconElement.classList.add("fa-eye-slash");
+          iconElement.style.color = "#ff00c8"; // Light up when active
+        } else {
+          input.type = "password";
+          iconElement.classList.remove("fa-eye-slash");
+          iconElement.classList.add("fa-eye");
+          iconElement.style.color = "rgba(223, 248, 255, 0.5)"; // Dim when hidden
+        }
+      }
+
+      // Simple Password Strength Visualizer
+      function checkStrength(password) {
+        const bar = document.getElementById("strength-bar");
+        const text = document.getElementById("strength-text");
+
+        if (password.length === 0) {
+          bar.style.width = "0%";
+          bar.style.backgroundColor = "transparent";
+          text.innerText = "Awaiting input...";
+          return;
+        }
+
+        let strength = 0;
+        if (password.length > 7) strength += 1; // Length
+        if (password.match(/[a-z]+/)) strength += 1; // Lowercase
+        if (password.match(/[A-Z]+/)) strength += 1; // Uppercase
+        if (password.match(/[0-9]+/)) strength += 1; // Numbers
+        if (password.match(/[$@#&!]+/)) strength += 1; // Special
+
+        switch (strength) {
+          case 1:
+          case 2:
+            bar.style.width = "33%";
+            bar.style.backgroundColor = "#ff4c4c"; // Red
+            text.innerText = "Weak - Add numbers and symbols";
+            break;
+          case 3:
+          case 4:
+            bar.style.width = "66%";
+            bar.style.backgroundColor = "#ffaa00"; // Orange
+            text.innerText = "Moderate - Getting closer";
+            break;
+          case 5:
+            bar.style.width = "100%";
+            bar.style.backgroundColor = "#ff00c8"; // KeyJinX Pink
+            text.innerText = "Strong - Vault Ready";
+            break;
+        }
+      }
+    </script>
+  </body>
+</html>

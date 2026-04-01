@@ -1,0 +1,1097 @@
+/* ============================================================
+   GLOBAL RESET & BASE STYLES
+   Purpose:
+     - Basic reset, box-sizing normalization, and base font-family.
+     - Keeps cross-browser layout predictable.
+   Notes:
+     - Use 'Segoe UI' as the primary; fallbacks provided.
+============================================================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    /* Background image + fallback color to match KEYJINX theme */
+    background-image: url("../assets/keyjinxBackground.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-color: #241733;
+
+    color: #DFF8FF;
+    padding: 10px;
+    min-height: 100vh;
+
+    /* Layout: center page content and allow footer to stick to bottom */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* ============================================================
+   LAYOUT CONTAINERS
+   Purpose:
+     - Centralized container and header sizing used across pages.
+   Notes:
+     - Keep container max-width modest for readability.
+============================================================ */
+
+header {
+    width: 100%;
+}
+
+.container {
+    width: 90%;
+    max-width: 900px;
+    background-color: rgba(8,10,14,0.56);
+    padding: 30px 40px;
+    margin-bottom: 30px;
+    border-radius: 15px;
+    border: 1px solid rgba(0,229,255,0.06);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.65), 0 0 80px rgba(0,229,255,0.06);
+    backdrop-filter: blur(6px);
+}
+
+
+/* ============================================================
+   NAVIGATION BAR
+   Purpose:
+     - Visual chrome for top navigation and mobile hamburger behavior.
+   Details:
+     - .logo hover color and .nav-menu active state included.
+============================================================ */
+
+nav {
+    width: 100%;
+    background-color: rgba(6,8,14,0.62);
+    padding: 15px 40px;
+    margin-bottom: 40px;
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border: 1px solid rgba(180,0,255,0.09);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 120px rgba(0,229,255,0.08);
+    backdrop-filter: blur(6px);
+    position: relative;
+    z-index: 9999;
+}
+
+/* Brand logo */
+nav .logo {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #00E5FF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+nav .logo:hover { color: #FF00C8; }
+
+/* Mobile hamburger */
+.hamburger {
+    display: none;               /* toggled on at small breakpoints */
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+}
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: #DFF8FF;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+/* Animated open state */
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+
+/* Main nav menu */
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+.nav-menu li { font-weight: 600; transition: color 0.3s ease; }
+.nav-menu li a {
+    color: #DFF8FF;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: color 0.3s ease;
+}
+.nav-menu li a.active {
+    background-color: rgba(180,0,255,0.18);
+    color: #B400FF;
+    box-shadow: 0 8px 30px rgba(180,0,255,0.06), inset 0 -2px 8px rgba(0,229,255,0.03);
+}
+.nav-menu li:hover a { color: #FF00C8; }
+
+/* ============================================================
+   HERO PANEL — Widened & Corrected Version
+============================================================ */
+
+.hero-panel {
+    width: 100%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 38px 32px;
+
+    background: rgba(0, 0, 0, 0.34);
+    border: 1px solid rgba(255, 0, 200, 0.18);
+    border-radius: 20px;
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 0 22px rgba(0, 229, 255, 0.16),
+        0 0 55px rgba(255, 0, 200, 0.12),
+        inset 0 0 40px rgba(0, 0, 0, 0.28);
+}
+
+/* WIDER CONTENT INSIDE PANEL */
+.hero-content {
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0 10px;
+}
+
+/* TITLE */
+.hero-heading .hero-brand {
+    font-size: clamp(3.6rem, 6vw, 5rem);
+    margin-bottom: 4px;
+}
+
+.hero-heading .hero-tagline {
+    font-size: clamp(1.7rem, 3.6vw, 2.35rem);
+    margin-top: 4px;
+}
+
+/* SUBTITLE — FIXED COLOR */
+.hero-subtitle {
+    margin: 10px 0 16px;
+    font-size: 1.38rem;
+    color: #FF00C8 !important; /* restored jinx-pink */
+    font-weight: 500;
+}
+
+/* DESCRIPTION */
+.hero-description {
+    font-size: 1.18rem;
+    line-height: 1.65;
+    margin: 0 auto 20px;
+    max-width: 820px;
+    color: #DFF8FF;
+    opacity: 0.95;
+}
+
+/* FIXED CTA BUTTON SPACING */
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 18px; /* restored proper spacing */
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.hero-buttons .btn {
+    min-width: 170px;
+    padding: 11px 24px;
+}
+
+
+/* ============================================================
+   BUTTONS (GLOBAL)
+   Purpose:
+     - Shared visual system for CTA and form buttons.
+   Notes:
+     - Hover/active provide subtle tactile feedback.
+============================================================ */
+
+button,
+.btn {
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    background-color: #B400FF;
+    color: #05050A;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    text-decoration: none;
+}
+button:hover,
+.btn:hover {
+    background-color: #FF00C8;
+    box-shadow: 0 12px 50px rgba(255,0,200,0.22);
+    transform: translateY(-2px);
+}
+button:active,
+.btn:active { transform: translateY(0); }
+
+.btn-primary { background-color: #FF00C8; }
+.btn-primary:hover { background-color: #B400FF; }
+/* .btn-secondary { background-color: #B400FF; } */
+
+
+/* ============================================================
+   FEATURE CARDS — FIXED GRID (4 → 2 → 1)
+============================================================ */
+
+/* Grid container — fully responsive */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);   /* 4 per row on desktop */
+    gap: 28px;
+    margin-top: 45px;
+    width: 100%;
+}
+
+/* Feature Card Styling */
+.feature-card {
+    background: rgba(8, 10, 14, 0.60);
+    border: 1px solid rgba(255, 0, 200, 0.12);
+    border-radius: 15px;
+
+    padding: 32px 24px;
+    text-align: center;
+
+    backdrop-filter: blur(8px);
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.55),
+        0 0 30px rgba(255, 0, 200, 0.08);
+
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 18px 60px rgba(0, 0, 0, 0.68),
+        0 0 55px rgba(255, 0, 200, 0.22);
+}
+
+/* Icons */
+.feature-card i {
+    font-size: 2.4rem;
+    color: #FF00C8;
+    margin-bottom: 15px;
+    text-shadow: 0 0 14px rgba(255, 0, 200, 0.55);
+    transition: transform 0.25s ease;
+}
+
+.feature-card:hover i {
+    transform: scale(1.12);
+}
+
+/* Title */
+.feature-card h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #00E5FF;
+    margin-bottom: 12px;
+}
+
+/* Description */
+.feature-card p {
+    font-size: 1.05rem;
+    color: #DFF8FF;
+    opacity: 0.92;
+    line-height: 1.6;
+}
+
+/* Tablet — 2 × 2 layout */
+@media (max-width: 992px) {
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile — 1 × 1 stacked */
+@media (max-width: 600px) {
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+/* ============================================================
+   CONTENT PAGES: ABOUT & CONTACT
+   Purpose:
+     - Typography & spacing for static content pages
+============================================================ */
+
+.about-content > h1 {
+    text-align: center;
+}
+.content-page{
+    text-align: left !important;
+}
+.about-content h2 {
+    text-align: left !important;
+    transform: none !important;      /* remove rotate(-1deg) */
+    padding: 0 !important;
+    margin: 25px 0 10px !important;  /* cleaner spacing */
+    width: auto !important;
+}
+.about-content h2::after{
+    left: 0;
+    bottom: -6px;
+    transform: rotate(-2deg);
+}
+
+.about-text p,
+.contact-intro p { 
+    font-size: 1.1rem; 
+    line-height: 1.8;
+    text-align: center;
+}
+
+.feature-list, 
+.tech-list {
+    list-style: none;
+    text-align: left;
+    padding-left: 0;
+    margin-left: 0;
+}
+.feature-list i {
+    margin-right: 12px;
+}
+.feature-list li, 
+.tech-list li {
+    text-align: left;
+    padding: 10px 0;
+    color: #DFF8FF;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+.tech-list li strong {
+    color: #00E5FF;
+}
+.about-content {
+    text-align: left !important;
+}
+
+.disclaimer {
+    margin-top: 30px;
+    padding: 20px;
+    border-left: 4px solid #FF00C8;
+    border-radius: 8px;
+    background-color: rgba(255,0,200,0.06);
+}
+.disclaimer h3 {
+    color: #FF00C8;
+    margin-bottom: 10px;
+    text-align: left;
+}
+.disclaimer h3::after{
+    left: 0;
+    bottom: -5px;
+    opacity: 0.5;
+    transform: rotate(-2deg);
+}
+.disclaimer p {
+    color: #FF89E4;
+    margin: 0;
+}
+
+/* ============================================================
+   PASSWORD FORM AND CONTACT FORM
+   Purpose:
+     - Controlled input styling to match the app theme.
+   Accessibility:
+     - High contrast labels and visible focus state.
+============================================================ */
+
+.password-form { max-width: 600px; margin: 0 auto 50px; }
+.contact-form { max-width: 600px; margin: 0 auto 50px; }
+
+.form-group { margin-bottom: 20px; }
+.form-group label {
+    display: block;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #00E5FF;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 2px solid rgba(0,229,255,0.28);
+    background: rgba(10,12,16,0.6);
+    color: #DFF8FF;
+    transition: border-color 0.3s ease;
+}
+.form-group input:focus,
+.form-group textarea:focus { border-color: #FF00C8; }
+
+.form-group textarea { resize: vertical; min-height: 120px; }
+
+
+/* ============================================================
+   TABLES (PASSWORD MANAGER)
+   Purpose:
+     - Show saved passwords, usernames and website entries.
+   Notes:
+     - Table is fully responsive via media queries below.
+============================================================ */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 5px; /* prevents clipping */
+}
+/* Force table to fit inside wrapper */
+.table-container table {
+    width: 100%;
+    border: 2px solid rgba(247, 0, 255, 0.103);
+    border-radius: 10px;
+    border-collapse: separate;   /* <-- IMPORTANT */
+    border-spacing: 0;           /* keeps layout same */
+    background-color: rgba(6, 8, 12, 0.4);
+}
+.table-container td:nth-child(3),
+.table-container th:nth-child(3) {
+    min-width: 240px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    overflow: hidden;
+    table-layout: auto;
+    border: 2px solid rgba(255, 0, 200, 0.25);
+    border-radius: 10px;
+}
+.table-container th,
+.table-container td {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255,0,200,0.08);
+    text-align: center;
+    vertical-align: middle;
+    white-space: normal;
+    word-wrap: break-word;
+}
+.table-container tr:last-child td {
+    border-bottom: none;
+}
+th {
+    background-color: rgba(6,8,12,0.7);
+    color: #00E5FF;
+    letter-spacing: 0.05em;
+}
+tr:hover {
+    background-color: rgba(180,0,255,0.08);
+    transition: background-color 0.3s ease;
+}
+
+/* Icon buttons inside table */
+table button {
+    background: none !important;
+    border: none !important;
+    padding: 6px 8px;
+    cursor: pointer;
+    margin-left: 8px;
+}
+table button i {
+    color: #DFF8FF;
+    font-size: 1rem;
+    display: inline-block;
+    vertical-align: middle;
+    transition: color 0.2s ease, transform 0.12s ease;
+}
+table button:hover i { 
+    color: #FF00C8;
+    text-shadow: 0 0 12px rgba(255,0,200,0.5);
+}
+
+/* ================================
+   PASSWORD VIEW / HIDE BUTTON STYLES
+   ================================ */
+
+.password-cell {
+    position: relative;
+    min-width: 240px;
+    white-space: nowarp;
+    overflow: hidden;
+}
+.password-cell span {
+    font-family: 'Consolas', monospace;
+    letter-spacing: 1px;
+}
+
+/* Hide real password initially */
+.password-cell .visible {
+    display: none;
+    color: #FF89E4;
+    font-weight: 600;
+    transition: opacity 0.4s ease;
+    text-shadow: 0 0 6px rgba(255,0,200,0.35);
+}
+.password-cell .masked {
+    display: inline-block;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+}
+
+/* ============================================================
+   CONTACT INFO CARDS
+   Purpose:
+     - Stylish neon cards for Email / Phone / Social contacts.
+     - Matches KEYJINX theme with glow, gradients & hover motion.
+============================================================ */
+
+.contact-info {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.contact-info h2 {
+    margin-bottom: 25px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.info-card {
+    background: rgba(8, 10, 14, 0.60);
+    border: 1px solid rgba(255, 0, 200, 0.12);
+    border-radius: 15px;
+    padding: 25px 20px;
+
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.55),
+        0 0 30px rgba(255, 0, 200, 0.08);
+
+    backdrop-filter: blur(8px);
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 
+        0 18px 60px rgba(0, 0, 0, 0.68),
+        0 0 55px rgba(255, 0, 200, 0.22);
+}
+
+.info-icon {
+    font-size: 2.4rem;
+    color: #FF00C8;
+    margin-bottom: 15px;
+    text-shadow: 0 0 14px rgba(255, 0, 200, 0.55);
+}
+
+.info-card h3 {
+    font-size: 1.3rem;
+    color: #00E5FF;
+    margin-bottom: 10px;
+}
+
+.info-card p {
+    font-size: 1.05rem;
+    color: #DFF8FF;
+    opacity: 0.9;
+}
+
+
+
+/* ============================================================
+   GRAFFITI HEADING STYLES (UNIFIED)
+   Purpose:
+     - Signature neon graffiti heading look for KEYJINX.
+   Notes:
+     - Merged repeated rules to avoid duplication.
+============================================================ */
+
+h1 {
+    width: 100%;
+    text-align: center;
+    color: #00E5FF;
+    font-size: 2.8rem;
+    font-weight: 700;
+    transform: rotate(-1deg);
+    text-shadow: 0 0 20px rgba(0,229,255,0.6), 
+                 0 0 40px rgba(0,229,255,0.25);
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    position: relative;
+}
+h1::after {
+    content: "";
+    width: 140px;
+    height: 4px;
+    background: linear-gradient(90deg, #FF00C8, #00E5FF);
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    transform: translateX(-50%) rotate(-3deg);
+    border-radius: 2px;
+    opacity: 0.9;
+}
+
+h2 {
+    padding: 10px;
+    width: 100%;
+    font-size: 1.8rem;
+    color: #00E5FF;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    transform: rotate(-1deg);
+    position: relative;
+}
+h2::after {
+    content: "";
+    width: 110px;
+    height: 3px;
+    background: linear-gradient(90deg, #FF00C8, transparent);
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    transform: translateX(-50%) rotate(-2deg);
+    border-radius: 3px;
+}
+
+h3 {
+    width: 100%;
+    text-align: center;
+    color: #FF00C8;
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin-bottom: 18px;
+    transform: rotate(-1deg);
+    position: relative;
+}
+h3::after {
+    content: "";
+    width: 80px;
+    height: 2px;
+    background: #FF00C8;
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%) rotate(-2deg);
+    border-radius: 2px;
+    opacity: 0.7
+}
+
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+.site-footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+    font-size: 0.9rem;
+}
+.site-footer p { margin: 0; }
+
+
+/* ============================================================
+   TOAST NOTIFICATION (PROFESSIONAL TIMING)
+   Purpose:
+     - Lightweight unobtrusive notification used throughout app.
+   Timing rationale:
+     - 300ms ease-out for transitions (common UX standard).
+     - Total visible window controlled by JS (recommended ~2.5s).
+============================================================ */
+
+/* Toast notification styling */
+#toast {
+    /* Fix the toast position at the top-right corner */
+    position: fixed;
+    top: 25px;
+    right: 25px;
+
+    /* Padding and text styling */
+    padding: 14px 22px;
+    font-size: 1rem;
+    border-radius: 10px;
+
+    /* Background and text color */
+    background: #e600b4;
+    color: #fff;
+
+    /* Initially hidden */
+    opacity: 0;
+    pointer-events: none;          /* Prevent mouse interaction while hidden */
+    transform: translateY(-20px);  /* Slight upward offset for animation */
+
+    /* Smooth fade + slide animation */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+
+    /* Ensure toast appears above all other elements */
+    z-index: 9999;
+
+    /* Optional border and glow effect */
+    border: 1px solid rgba(255,0,200,0.28);
+    box-shadow: 0 0 35px rgba(255,0,200,0.28);
+}
+
+/* When 'show' class is added → make toast visible */
+#toast.show { 
+    opacity: 1;              /* Fade in */
+    transform: translateY(0); /* Slide down into place */
+}
+
+
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   Purpose:
+     - Ensure the layout is usable on tablets and phones.
+   Strategy:
+     - Breakpoints chosen for typical tablet (768px) and phone (600px)
+============================================================ */
+/* ============================================================
+   TABLET — 992px and below
+   Matches desktop spacing, glow-intensity, and grid behavior
+============================================================ */
+@media (max-width: 992px) {
+
+    /* Keep hero readable but scaled */
+    .hero-panel {
+        padding: 32px 26px;
+    }
+
+    .hero-content {
+        padding: 0 5px;
+    }
+
+    .hero-heading .hero-brand {
+        font-size: clamp(3rem, 7vw, 4.2rem);
+    }
+
+    .hero-heading .hero-tagline {
+        font-size: clamp(1.4rem, 3vw, 2rem);
+    }
+
+    .hero-description {
+        font-size: 1.05rem;
+    }
+
+    /* Feature grid → 2 columns (your desktop glow preserved) */
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+
+    /* Info cards grid remains symmetric */
+    .info-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+}
+
+
+/* ============================================================
+   TABLET — 768px and below
+   Smoother scale-down for headings & layout
+============================================================ */
+@media (max-width: 768px) {
+
+    h1 { font-size: 2.4rem; }
+    h2 { font-size: 1.55rem; }
+    h3 { font-size: 1.2rem; }
+
+    .hero-panel { padding: 28px 22px; }
+
+    .hero-heading .hero-brand {
+        font-size: clamp(2.6rem, 7vw, 3.4rem);
+    }
+
+    .hero-heading .hero-tagline {
+        font-size: 1.45rem;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+        max-width: 90%;
+    }
+
+    /* Buttons stay proportional */
+    .hero-buttons {
+        gap: 14px;
+    }
+
+    button,
+    .btn {
+        padding: 11px 20px;
+        font-size: 0.95rem;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr; /* 1 column for readability */
+    }
+}
+
+
+
+/* ============================================================
+   MOBILE — 600px and below
+   Hamburger, stacked buttons, centered layout
+============================================================ */
+@media (max-width: 600px) {
+
+    /* Enable hamburger */
+    .hamburger {
+        display: flex;
+    }
+
+    /* Mobile nav menu */
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        padding: 20px 0;
+        margin-top: 15px;
+        background-color: rgba(6,8,14,0.98);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        text-align: center;
+        gap: 18px;
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    /* Hero section */
+    .hero-content {
+        padding: 30px 20px;
+    }
+
+    .hero-heading .hero-brand {
+        font-size: 2.2rem;
+    }
+
+    .hero-heading .hero-tagline {
+        font-size: 1.25rem;
+    }
+
+    .hero-description {
+        font-size: 0.95rem;
+        line-height: 1.55;
+    }
+
+    /* Buttons stacked cleanly */
+    .hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    button,
+    .btn {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+
+    /* Table readability */
+    th, td {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+        white-space: normal;
+    }
+
+    /* Info cards tighter for small screens */
+    .info-card {
+        padding: 20px 16px;
+    }
+}
+
+
+/* ============================================================
+   HEXCORE GLITCH – V3 (Balanced Cyan + Pink/Purple)
+   Visible color ghosts without whitening
+============================================================ */
+
+.glitch-heavy {
+    position: relative;
+    display: inline-block;
+    animation: glitchFlicker 2.2s infinite;
+}
+
+/* Ghost layers */
+.glitch-heavy::before,
+.glitch-heavy::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+/* Pink/Purple ghost */
+.glitch-heavy::before {
+    color: #FF00C8;
+    opacity: 0.45;
+    transform: translate(2px, -2px);
+    animation: glitchBefore 2.2s infinite;
+}
+
+/* Cyan ghost */
+.glitch-heavy::after {
+    color: #00E5FF;
+    opacity: 0.42;
+    transform: translate(-2px, 2px);
+    animation: glitchAfter 2.2s infinite;
+}
+
+/* master flicker */
+@keyframes glitchFlicker {
+    0%, 88%, 100% { opacity: 1; }
+    89% { opacity: 0.8; }
+    90% { opacity: 1; }
+    92% { opacity: 0.7; }
+}
+
+/* pink glitch movement */
+@keyframes glitchBefore {
+    0%, 80% {
+        transform: translate(2px, -2px);
+        opacity: 0.45;
+    }
+    82% {
+        transform: translate(-2px, 1px);
+        opacity: 0.35;
+    }
+    84% {
+        transform: translate(3px, -1px);
+        opacity: 0.55;
+    }
+    86%, 100% {
+        transform: translate(2px, -2px);
+    }
+}
+
+/* cyan glitch movement */
+@keyframes glitchAfter {
+    0%, 80% {
+        transform: translate(-2px, 2px);
+        opacity: 0.42;
+    }
+    82% {
+        transform: translate(2px, -1px);
+        opacity: 0.32;
+    }
+    84% {
+        transform: translate(-3px, 1px);
+        opacity: 0.52;
+    }
+    86%, 100% {
+        transform: translate(-2px, 2px);
+    }
+}
+
+/* =========================================
+   KEYJINX AUTHENTICATION UI UPGRADES
+   ========================================= */
+
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  color: #ff00c8;
+  font-size: 1rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 15px;
+  cursor: pointer;
+  color: rgba(223, 248, 255, 0.5); /* Matches your dff8ff text, slightly dimmed */
+  transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+  color: #ff00c8;
+}
+
+/* Adjust the input padding so text doesn't overlap the icons */
+.input-wrapper input {
+  width: 100%;
+  padding-left: 45px !important; 
+  padding-right: 45px !important;
+}
+
+/* Password Strength Meter */
+.strength-meter-container {
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  overflow: hidden;
+}
+
+.strength-bar {
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.auth-switch-text {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 0.95rem;
+  opacity: 0.8;
+  color: #dff8ff;
+}
+
+.auth-link {
+  color: #ff00c8;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: text-shadow 0.3s ease;
+}
+
+.auth-link:hover {
+  text-shadow: 0 0 8px rgba(255, 0, 200, 0.6);
+}
