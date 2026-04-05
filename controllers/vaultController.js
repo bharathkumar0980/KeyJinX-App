@@ -28,3 +28,27 @@ exports.addPassword = async (req, res) => {
         res.status(500).json({ message: "Could not save password" });
     }
 };
+
+// ==========================================
+// VAPORIZE A CREDENTIAL
+// ==========================================
+exports.deletePassword = async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Tell MongoDB to find this ID and delete it
+        const deletedPassword = await Vault.findByIdAndDelete(id);
+
+        // If the ID wasn't in the database
+        if (!deletedPassword) {
+            return res.status(404).json({ message: "Credential not found in the vault." });
+        }
+
+        // Success!
+        res.status(200).json({ message: "Credential successfully vaporized." });
+        
+    } catch (error) {
+        console.error("❌ DB DELETE ERROR:", error);
+        res.status(500).json({ message: "Server error during vaporization." });
+    }
+};

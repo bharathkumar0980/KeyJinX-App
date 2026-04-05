@@ -1,0 +1,93 @@
+/* ============================================================
+   TABLES (VAULT UI - JINX THEME)
+   ============================================================ */
+.table-container {
+    background: rgba(17, 17, 17, 0.6); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(var(--jinx-cyan-rgb), 0.3);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(var(--jinx-cyan-rgb), 0.15);
+    overflow-x: auto;
+    margin-bottom: 30px;
+    width: 100%;
+    padding: 5px; 
+}
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(6, 8, 12, 0.4);
+    min-width: 600px; /* Prevents columns from crushing on mobile */
+}
+th {
+    background: rgba(var(--jinx-cyan-rgb), 0.15);
+    color: rgb(var(--jinx-cyan-rgb));
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 18px;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(var(--jinx-cyan-rgb), 0.3);
+    text-align: center;
+}
+td {
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: rgb(var(--text-main-rgb));
+    text-align: center;
+    vertical-align: middle;
+    transition: all 0.3s ease;
+}
+tr:hover td {
+    background: rgba(var(--jinx-purple-rgb), 0.15);
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(var(--jinx-cyan-rgb), 0.6);
+}
+
+/* Action Buttons inside Table */
+table button {
+    background: none !important;
+    border: none !important;
+    padding: 6px 8px;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: none; /* overrides global button shadow */
+}
+table button i {
+    color: rgb(var(--text-main-rgb));
+    font-size: 1.1rem;
+    transition: color 0.2s ease, transform 0.12s ease;
+}
+
+.action-btn:hover { transform: scale(1.1); }
+.action-btn:hover i { color: rgb(var(--success-rgb)); text-shadow: 0 0 12px rgba(var(--success-rgb), 0.8); }
+
+.delete-btn:hover { transform: scale(1.05); }
+.delete-btn:hover i { color: rgb(var(--danger-rgb)); text-shadow: 0 0 12px rgba(var(--danger-rgb), 0.8); }
+
+.password-cell {
+    position: relative;
+    min-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.password-cell span {
+    font-family: 'Consolas', monospace;
+    letter-spacing: 1px;
+}
+.password-cell .visible {
+    display: none;
+    color: rgb(var(--jinx-pink-rgb));
+    font-weight: 600;
+    transition: opacity 0.4s ease;
+    text-shadow: 0 0 6px rgba(var(--jinx-pink-rgb), 0.35);
+}
+.password-cell .masked {
+    display: inline-block;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+}
+
+@media (max-width: 600px) {
+    th, td { padding: 12px 10px; font-size: 0.9rem; }
+}

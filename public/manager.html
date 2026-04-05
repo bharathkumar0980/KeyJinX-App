@@ -1,104 +1,131 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Manage your passwords securely with KEYJINX" />
+    <meta
+      name="description"
+      content="Manage your passwords securely with KEYJINX"
+    />
     <title>KEYJINX - Password Manager</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
     <!-- Navigation Header -->
     <header>
       <nav>
-          <a href="index.html" class="logo">KEYJINX</a>
-          <div class="hamburger" id="hamburger">
-              <span></span>
-              <span></span>
-              <span></span>
-          </div>
-          
-          <ul class="nav-menu" id="navMenu"></ul>
+        <a href="index.html" class="logo">KEYJINX</a>
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <ul class="nav-menu" id="navMenu"></ul>
       </nav>
     </header>
 
     <!-- Main Content Area -->
     <main class="container">
-        <!-- Page Title -->
-        <header class="page-header">
-            <h1>Password Manager</h1>
-        </header>
+      <!-- Page Title -->
+      <header class="page-header">
+        <h1>Password Manager</h1>
+      </header>
 
-        <!-- Section: Display Saved Passwords -->
-        <section class="passwords-section">
-            <h2>Your Passwords</h2>
-            <!-- Table to display all saved passwords -->
-            <div class="table-container">
-                <table aria-label="Saved passwords list">
-                    <!-- Passwords will be dynamically injected here by script.js -->
-                </table>
+      <!-- Section: Display Saved Passwords -->
+      <section class="passwords-section">
+        <h2>Your Passwords</h2>
+        <!-- Table to display all saved passwords -->
+        <div class="table-container">
+          <table aria-label="Saved passwords list">
+            <!-- Passwords will be dynamically injected here by script.js -->
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Add New Password Form -->
+      <section class="add-password-section">
+        <h2>Add New Password</h2>
+        <!-- Form to add new password entry -->
+        <form
+          id="passwordForm"
+          class="password-form"
+          aria-label="Add new password form"
+        >
+          <!-- Website Input -->
+          <div class="form-group">
+            <label for="website">Website / Name</label>
+            <input
+              type="text"
+              id="website"
+              name="website"
+              placeholder="Microsoft.com"
+              required
+              aria-required="true"
+            />
+          </div>
+          <!-- Username Input -->
+          <div class="form-group">
+            <label for="username">Username / Email</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="john@example.com  |  johnDoe0980"
+              required
+              aria-required="true"
+            />
+          </div>
+          <!-- Password Input -->
+          <div class="form-group icon-input-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-key input-icon"></i>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+                aria-required="true"
+                oninput="checkVaultStrength(this.value)"
+              />
+              <i
+                class="fa-solid fa-eye toggle-password"
+                onclick="toggleVaultVisibility('password', this)"
+              ></i>
             </div>
-        </section>
-
-        <!-- Section: Add New Password Form -->
-        <section class="add-password-section">
-            <h2>Add New Password</h2>
-            <!-- Form to add new password entry -->
-            <form id="passwordForm" class="password-form" aria-label="Add new password form">
-                <!-- Website Input -->
-                 <div class="form-group">
-                    <label for="website">Website / Name</label>
-                    <input 
-                        type="text" 
-                        id="website" 
-                        name="website" 
-                        placeholder="Microsoft.com"
-                        required 
-                        aria-required="true"
-                    />
-                </div>
-                <!-- Username Input -->
-                <div class="form-group">
-                <label for="username">Username / Email</label>
-                    <input 
-                        type="text" 
-                        id="username" 
-                        name="username" 
-                        placeholder="john@example.com  |  johnDoe0980"
-                        required 
-                        aria-required="true"
-                    />
-                </div>
-                <!-- Password Input -->
-                 <div class="form-group">
-                <label for="password">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        placeholder="Enter your password"
-                        required 
-                        aria-required="true"
-                    />
-                </div>
-                <!-- Submit Button -->
-                <button class="btn" type="submit" aria-label="Save password">
-                    Submit
-                </button>
-            </form>
-        </section>
+            <div class="strength-meter-container">
+              <div id="vault-strength-bar" class="strength-bar"></div>
+            </div>
+            <small
+              id="vault-strength-text"
+              style="color: #dff8ff; opacity: 0.7; font-size: 0.8rem"
+            >
+              Awaiting input...
+            </small>
+          </div>
+          <!-- Submit Button -->
+          <button class="btn" type="submit" aria-label="Save password">
+            Submit
+          </button>
+        </form>
+      </section>
     </main>
     <div id="toast"></div>
 
     <!-- Footer -->
     <footer class="site-footer">
-        <p>&copy; 2025 KEYJINX. All rights reserved.</p>
+      <p>&copy; 2025 KEYJINX. All rights reserved.</p>
     </footer>
 
     <!-- JavaScript Files -->
-    <script src="js/contact.js"></script>
     <script src="js/navbar.js"></script>
+    <script src="js/ui.js"></script>
     <script src="js/script.js"></script>
-</body>
+  </body>
 </html>
