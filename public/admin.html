@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KEYJINX // SENTINEL</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Sentinel Theme - Clean, Modern, Cyber */
+        :root {
+            --bg-base: #09090b; /* Deep zinc */
+            --bg-card: rgba(24, 24, 27, 0.7);
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --text-muted: #a1a1aa;
+        }
+
+        body.admin-page {
+            background-color: var(--bg-base);
+            color: #fafafa;
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-image: radial-gradient(circle at top, rgba(var(--jinx-purple-rgb), 0.05), transparent 40%);
+            min-height: 100vh;
+        }
+
+        .sentinel-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Header Layout */
+        .sentinel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            letter-spacing: -1px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(var(--jinx-cyan-rgb), 0.1);
+            border: 1px solid rgba(var(--jinx-cyan-rgb), 0.2);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: rgb(var(--jinx-cyan-rgb));
+            font-family: 'Consolas', monospace;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            background: rgb(var(--jinx-cyan-rgb));
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgb(var(--jinx-cyan-rgb));
+        }
+
+        /* Grid System */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        /* Pristine Cards */
+        .sentinel-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 30px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sentinel-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(var(--jinx-cyan-rgb), 0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .sentinel-card.pink:hover { border-color: rgba(var(--jinx-pink-rgb), 0.3); }
+
+        /* Subtle Accent Lines on Cards */
+        .sentinel-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, rgb(var(--jinx-cyan-rgb)), transparent);
+            opacity: 0.5;
+        }
+        .sentinel-card.pink::before { background: linear-gradient(90deg, rgb(var(--jinx-pink-rgb)), transparent); }
+
+        .card-label {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.85rem; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+        }
+
+        .card-value {
+            font-size: 3.5rem; font-weight: 700; margin: 15px 0 5px 0;
+            font-family: 'Consolas', monospace; letter-spacing: -2px;
+        }
+
+        /* Elegant Table Section */
+        .table-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .table-section h3 {
+            margin: 0 0 20px 0; font-size: 1.2rem; font-weight: 500;
+        }
+
+        .sentinel-table { width: 100%; border-collapse: collapse; }
+        .sentinel-table th {
+            text-align: left; padding: 15px 10px;
+            color: var(--text-muted); font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .sentinel-table td {
+            padding: 20px 10px; border-bottom: 1px solid rgba(255,255,255,0.02);
+            font-size: 0.95rem; color: #e4e4e7;
+        }
+        .sentinel-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+        /* Action Buttons */
+        .btn-inspect {
+            background: transparent;
+            border: 1px solid rgba(var(--jinx-cyan-rgb), 0.3);
+            color: rgb(var(--jinx-cyan-rgb));
+            padding: 6px 12px; border-radius: 6px;
+            cursor: pointer; transition: 0.2s; font-size: 0.8rem;
+        }
+        .btn-inspect:hover {
+            background: rgba(var(--jinx-cyan-rgb), 0.1);
+            border-color: rgb(var(--jinx-cyan-rgb));
+        }
+    </style>
+</head>
+<body class="admin-page">
+    <div class="sentinel-container">
+        
+        <header class="sentinel-header">
+            <div>
+                <p style="color: rgb(var(--jinx-pink-rgb)); font-family: 'Consolas', monospace; margin: 0 0 5px 0;">> ROOT_AUTH: THE_ADMIN</p>
+                <h1 class="header-title">Sentinel Dashboard</h1>
+            </div>
+            <div class="status-pill">
+                <div class="status-dot"></div>
+                <span id="db-status">CONNECTING TO MAINFRAME</span>
+            </div>
+        </header>
+
+        <div class="metric-grid">
+            <div class="sentinel-card">
+                <div class="card-label"><span>Active Clients</span> <i class="fa-solid fa-users"></i></div>
+                <div class="card-value" id="total-users">0</div>
+                <div style="font-size: 0.8rem; color: rgb(var(--jinx-cyan-rgb));">+ Verified Nodes</div>
+            </div>
+
+            <div class="sentinel-card pink">
+                <div class="card-label"><span>Vault Entries</span> <i class="fa-solid fa-lock"></i></div>
+                <div class="card-value" id="total-passwords">0</div>
+                <div style="font-size: 0.8rem; color: rgb(var(--jinx-pink-rgb));">+ Encrypted Strings</div>
+            </div>
+
+            <div class="sentinel-card">
+                <div class="card-label"><span>Mainframe Load</span> <i class="fa-solid fa-server"></i></div>
+                <div class="card-value" id="db-size">0.0</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Megabytes (MB)</div>
+            </div>
+        </div>
+
+        <section class="table-section">
+            <h3>Encrypted Transmissions</h3>
+            <table class="sentinel-table">
+                <thead>
+                    <tr>
+                        <th>Origin Identity</th>
+                        <th>Payload Preview</th>
+                        <th>Timestamp</th>
+                        <th style="text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="message-body">
+                    </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,23 +1,46 @@
 /**
- * CONTACT FORM HANDLER
- * =====================
- * Handles contact form submission
+ * KEYJINX - Contact Form Handler
  */
-
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    // Prevent default form submission
+document.getElementById('contactForm')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    // Get form values
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
-    
-    // In a real application, you would send this data to a server
-    // For now, we'll just show a success message
-    alert(`Thank you, ${name}! Your message has been sent.\n\nWe'll respond to ${email} soon.`);
-    
-    // Clear the form
-    document.getElementById('contactForm').reset();
+    const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+    };
+
+    try {
+        const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+
+        // This will now receive actual JSON instead of index.html
+        const data = await response.json();
+
+        if (response.ok) {
+            contactToast("Message encrypted and sent! 📨");
+            e.target.reset(); 
+        } else {
+            contactToast(data.message || "Submission failed.", "error");
+        }
+    } catch (error) {
+        console.error("Connection Error:", error);
+        contactToast("Server is unreachable.", "error");
+    }
 });
+
+function contactToast(msg, type = "success") {
+    let toast = document.getElementById("toast");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toast";
+        document.body.appendChild(toast);
+    }
+    toast.innerText = msg;
+    toast.className = "show " + type;
+    setTimeout(() => { toast.className = ""; }, 3000);
+}

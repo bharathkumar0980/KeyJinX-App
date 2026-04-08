@@ -6,33 +6,34 @@ const connectDB = require('./config/db');
 // Import Routes
 const vaultRoutes = require('./routes/vaultRoutes');
 const authRoutes = require('./routes/authRoutes');
+const contactRoutes = require('./routes/contactRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
-// Initialize Express
 const app = express();
-
-// Connect to MongoDB Atlas
 connectDB();
 
-// --- MIDDLEWARE ---
-// Allows the server to understand JSON data sent from your frontend
-app.use(express.json());
+// --- 1. MIDDLEWARE (MUST BE FIRST) ---
+app.use(express.json()); 
 
-// Serves your HTML, CSS, and JS files from the public folder
+// --- 2. API ROUTES (MUST BE SECOND) ---
+// We put these here so the server checks for data requests first
+app.use('/api/auth', authRoutes);
+app.use('/api/vault', vaultRoutes);
+app.use('/api/contact', contactRoutes);
+app.use('/api/admin', adminRoutes);
+
+// --- 3. STATIC FILES (THIRD) ---
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- API ROUTES ---
-// Links your vault logic (GET/POST/DELETE) to the /api/vault endpoint
-app.use('/api/vault', vaultRoutes);
-
-// Links your authentication logic (Login/Register) to the /api/auth endpoint
-app.use('/api/auth', authRoutes);
-
-// --- FRONTEND ROUTING ---
-// Ensures that refreshing the page or manual navigation points to index.html
-app.get(/(.*)/, (req, res) => {
+// --- 4. FRONTEND ROUTING (LAST) ---
+/**
+ * Using a Regex ensures that only non-API routes 
+ * return the index.html file.
+ */
+app.get(/^((?!\/api).)*$/, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-// --- SERVER START ---
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Hextech Server humming at: http://localhost:${PORT}`);

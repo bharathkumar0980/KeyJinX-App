@@ -1,11 +1,12 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { getPasswords, addPassword, deletePassword } = require('../controllers/vaultController');
+const vaultController = require("../controllers/vaultController");
+const auth = require("../middleware/authenticate"); // Import the bouncer
 
-// Define the routes for /api/vault
-router.get('/', getPasswords);
-router.post('/', addPassword);
-router.delete('/:id', deletePassword); // Add this line to handle DELETE requests
+// Add 'auth' as the second argument to protect these routes
+router.get("/", auth, vaultController.getPasswords);
+router.post("/", auth, vaultController.addPassword);
+router.delete("/:id", auth, vaultController.deletePassword);
+router.put('/:id', auth, vaultController.updateVaultEntry);
 
-// CRITICAL: If this line is missing, server.js crashes!
 module.exports = router;

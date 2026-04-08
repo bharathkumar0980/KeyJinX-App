@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeyJinX | Emergency Override</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="auth-page">
+    <div class="container">
+        <header>
+            <h1 id="pageTitle" class="neon-text">EMERGENCY OVERRIDE</h1>
+            <p class="subtitle">PROTOCOL: RESET MASTER PASSWORD</p>
+        </header>
+
+        <main class="auth-container">
+            <div id="resetSection" class="glass-panel">
+                <form id="resetForm">
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="resetEmail" placeholder="Operative Email" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-key"></i>
+                        <input type="text" id="recoveryKey" placeholder="KJX-XXXX-XXXX-XXXX" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="newPassword" placeholder="New Master Password" required>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <p>WARNING: Resetting will vaporize all existing vault data for security.</p>
+                    </div>
+
+                    <button type="submit" class="btn-primary reset-btn">RECALIBRATE VAULT</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Remembered? <a href="login.html">Return to Access</a></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast"></div>
+    <script src="js/auth.js"></script>
+</body>
+</html>

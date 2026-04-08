@@ -2,92 +2,160 @@
    TABLES (VAULT UI - JINX THEME)
    ============================================================ */
 .table-container {
-    background: rgba(17, 17, 17, 0.6); 
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(var(--jinx-cyan-rgb), 0.3);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(var(--jinx-cyan-rgb), 0.15);
-    overflow-x: auto;
-    margin-bottom: 30px;
-    width: 100%;
-    padding: 5px; 
+  background: rgba(17, 17, 17, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(var(--jinx-cyan-rgb), 0.3);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(var(--jinx-cyan-rgb), 0.15);
+  overflow-x: auto;
+  margin-bottom: 30px;
+  width: 100%;
+  padding: 5px;
 }
+
 .table-container table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: rgba(6, 8, 12, 0.4);
-    min-width: 600px; /* Prevents columns from crushing on mobile */
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(6, 8, 12, 0.4);
+  min-width: 600px;
 }
+
 th {
-    background: rgba(var(--jinx-cyan-rgb), 0.15);
-    color: rgb(var(--jinx-cyan-rgb));
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    padding: 18px;
-    font-weight: 700;
-    border-bottom: 1px solid rgba(var(--jinx-cyan-rgb), 0.3);
-    text-align: center;
+  background: rgba(var(--jinx-cyan-rgb), 0.15);
+  color: rgb(var(--jinx-cyan-rgb));
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 18px;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(var(--jinx-cyan-rgb), 0.3);
+  text-align: center;
 }
+
 td {
-    padding: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    color: rgb(var(--text-main-rgb));
-    text-align: center;
-    vertical-align: middle;
-    transition: all 0.3s ease;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgb(var(--text-main-rgb));
+  text-align: center;
+  vertical-align: middle;
+  transition: all 0.3s ease;
+  font-family: "Consolas", "Courier New", monospace;
+  letter-spacing: 1px;
 }
+
 tr:hover td {
-    background: rgba(var(--jinx-purple-rgb), 0.15);
-    color: #ffffff;
-    text-shadow: 0 0 8px rgba(var(--jinx-cyan-rgb), 0.6);
+  background: rgba(var(--jinx-purple-rgb), 0.15);
+  text-shadow: 0 0 8px rgba(var(--jinx-cyan-rgb), 0.6);
 }
 
-/* Action Buttons inside Table */
+/* ============================================================
+   TABLE ACTION BUTTONS
+   ============================================================ */
+/* This targets every button inside the vault table */
 table button {
-    background: none !important;
-    border: none !important;
-    padding: 6px 8px;
-    cursor: pointer;
-    margin-left: 8px;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: none; /* overrides global button shadow */
+  background: none !important;
+  border: none !important;
+  padding: 8px !important;
+  cursor: pointer;
+  margin: 0 4px;
+  /* Matches global transition feel from components.css */
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s ease;
+  box-shadow: none !important; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+
 table button i {
-    color: rgb(var(--text-main-rgb));
-    font-size: 1.1rem;
-    transition: color 0.2s ease, transform 0.12s ease;
+  color: rgb(var(--text-main-rgb));
+  font-size: 1.15rem;
+  opacity: 0.8;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
-.action-btn:hover { transform: scale(1.1); }
-.action-btn:hover i { color: rgb(var(--success-rgb)); text-shadow: 0 0 12px rgba(var(--success-rgb), 0.8); }
+/* Unified Hover State: Lift and Glow */
+table button:hover {
+  transform: scale(1.25) translateY(-2px); 
+  filter: drop-shadow(0 0 8px rgba(var(--jinx-cyan-rgb), 0.4));
+}
 
-.delete-btn:hover { transform: scale(1.05); }
-.delete-btn:hover i { color: rgb(var(--danger-rgb)); text-shadow: 0 0 12px rgba(var(--danger-rgb), 0.8); }
+table button:hover i {
+  opacity: 1;
+  color: rgb(var(--jinx-pink-rgb)); /* Hextech Cyan highlight */
+  text-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.8);
+}
 
+/* Destructive Action Hover: Pink Glow */
+table button.delete-btn:hover i {
+  color: rgb(var(--jinx-pink-rgb)); 
+  text-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.8);
+}
+
+/* Active "Click" Animation */
+table button:active {
+  transform: scale(0.95);
+}
+
+/* ============================================================
+   PASSWORD MASKING UI
+   ============================================================ */
 .password-cell {
-    position: relative;
-    min-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
+  display: flex;
+  position: relative;
+  min-width: 200px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  white-space: nowrap;
+  font-family: "Consolas", monospace;
 }
-.password-cell span {
-    font-family: 'Consolas', monospace;
-    letter-spacing: 1px;
+
+.vault-text {
+  font-family: "Consolas", monospace;
+  letter-spacing: 1px;
+  color: rgb(var(--text-main-rgb));
+  transition: all 0.3s ease;
 }
-.password-cell .visible {
-    display: none;
+
+/* Mask effect using text-security */
+.vault-text.masked {
+  -webkit-text-security: disc; 
+  text-security: disc;         
+  opacity: 0.7;
+}
+
+.vault-text.unmasked {
+  -webkit-text-security: none;
+  text-security: none;
+  opacity: 1;
+}
+
+.vault-actions {
+  display: flex;
+  gap: 5px;
+}
+
+/* System Status Pulse */
+.pulse {
+    color: rgb(var(--jinx-cyan-rgb));
+    animation: neonPulse 2s infinite;
+}
+
+@keyframes neonPulse {
+    0% { text-shadow: 0 0 5px rgba(var(--jinx-cyan-rgb), 0.2); opacity: 0.7; }
+    50% { text-shadow: 0 0 20px rgba(var(--jinx-cyan-rgb), 0.8); opacity: 1; }
+    100% { text-shadow: 0 0 5px rgba(var(--jinx-cyan-rgb), 0.2); opacity: 0.7; }
+}
+
+/* Specific styling for the Admin Header */
+.admin-identity strong {
     color: rgb(var(--jinx-pink-rgb));
-    font-weight: 600;
-    transition: opacity 0.4s ease;
-    text-shadow: 0 0 6px rgba(var(--jinx-pink-rgb), 0.35);
-}
-.password-cell .masked {
-    display: inline-block;
-    opacity: 1;
-    transition: opacity 0.4s ease;
+    text-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.5);
 }
 
 @media (max-width: 600px) {
-    th, td { padding: 12px 10px; font-size: 0.9rem; }
+  th, td {
+    padding: 12px 10px;
+    font-size: 0.9rem;
+  }
 }

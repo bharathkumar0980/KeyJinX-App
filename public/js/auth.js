@@ -37,10 +37,13 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
+
         const data = await res.json();
+
         if (res.ok) {
+            alert(`🚨 EMERGENCY RECOVERY KEY 🚨\n\n${data.recoveryKey}\n\nSAVE THIS NOW. If you lose your password, this is the ONLY way to recover your vault. We do not store this in plain text!`);
             showToast(data.message);
-            showLoginBtn.click();
+            document.getElementById("showLoginBtn").click();
         } else {
             showToast(data.message, "error");
         }
@@ -67,6 +70,39 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+// 4. Emergency Override Submission
+document.getElementById("resetForm")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById("resetEmail").value;
+    const recoveryKey = document.getElementById("recoveryKey").value;
+    const newPassword = document.getElementById("newPassword").value;
+
+    try {
+        const res = await fetch('/api/auth/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, recoveryKey, newPassword })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            showToast("Vault Recalibrated. Data Purged.");
+            // Redirect to login so they can use their new password
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 2500);
+        } else {
+            showToast(data.message, "error");
+        }
+    } catch (error) {
+        console.error("Reset Error:", error);
+        showToast("Communication link severed.", "error");
+    }
+});
+
 
 function showToast(msg, type = "success") {
     const toast = document.getElementById("toast");
