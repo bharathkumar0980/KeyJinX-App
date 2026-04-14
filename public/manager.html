@@ -84,7 +84,6 @@
           <div class="form-group icon-input-group">
             <label for="password">Password</label>
             <div class="input-wrapper">
-              <i class="fa-solid fa-key input-icon"></i>
               <input
                 type="password"
                 id="password"
@@ -94,7 +93,10 @@
                 aria-required="true"
                 oninput="checkVaultStrength(this.value)"
               />
-              <i class="fa-solid fa-eye toggle-password" onclick="toggleVaultVisibility('password', this)"></i>
+              <i
+                class="fa-solid fa-eye toggle-password"
+                onclick="toggleVaultVisibility('password', this)"
+              ></i>
             </div>
             <div class="strength-meter-container">
               <div id="vault-strength-bar" class="strength-bar"></div>
@@ -117,12 +119,13 @@
 
     <!-- Footer -->
     <footer class="site-footer">
-      <p>&copy; 2025 KEYJINX. All rights reserved.</p>
+      <p>&copy; 2026 KEYJINX. All rights reserved.</p>
     </footer>
 
     <!-- JavaScript Files -->
     <script src="js/navbar.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   </body>
 </html>

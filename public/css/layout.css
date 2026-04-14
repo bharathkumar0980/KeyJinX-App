@@ -1,114 +1,473 @@
 /* ============================================================
    LAYOUT CONTAINERS
    ============================================================ */
-header { width: 100%; }
-
-.container {
-    width: 90%;
-    max-width: 900px;
-    background-color: rgba(var(--bg-panel-rgb), 0.56);
-    padding: 30px 40px;
-    margin-bottom: 30px;
-    border-radius: 15px;
-    border: 1px solid rgba(var(--jinx-cyan-rgb), 0.06);
-    box-shadow: 0 30px 80px rgba(0,0,0,0.65), 0 0 80px rgba(var(--jinx-cyan-rgb), 0.06);
-    backdrop-filter: blur(6px);
+body {
+  padding-top: 80px;
 }
 
 /* ============================================================
-   NAVIGATION BAR
+   JINX SCHEMATIC CORE (.container)
+   Blueprint grid + wiring trace + explosive origin mark
    ============================================================ */
+
+/* Slow ambient glow breathe between cyan and pink */
+@keyframes schematic-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 0 25px rgba(var(--jinx-cyan-rgb), 0.12),
+      0 0 60px rgba(var(--jinx-purple-rgb), 0.08),
+      0 20px 90px rgba(0, 0, 0, 0.92),
+      inset 0 0 55px rgba(0, 0, 0, 0.65),
+      inset 0 1px 0 rgba(var(--jinx-cyan-rgb), 0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(var(--jinx-pink-rgb), 0.12),
+      0 0 70px rgba(var(--jinx-purple-rgb), 0.1),
+      0 20px 90px rgba(0, 0, 0, 0.92),
+      inset 0 0 55px rgba(0, 0, 0, 0.65),
+      inset 0 1px 0 rgba(var(--jinx-pink-rgb), 0.12);
+  }
+}
+
+/* Signal pulse traveling left-to-right along the trace wire */
+@keyframes signal-travel {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(100% + 200px) 0;
+  }
+}
+
+/* Connector node ping at ends of trace */
+@keyframes node-ping {
+  0%,
+  100% {
+    box-shadow:
+      -6px 0 0 3px rgba(var(--jinx-pink-rgb), 0.9),
+      -6px 0 0 6px rgba(var(--jinx-pink-rgb), 0.25),
+      calc(100% + 6px) 0 0 3px rgba(var(--jinx-cyan-rgb), 0.8),
+      0 0 10px rgba(var(--jinx-cyan-rgb), 0.12);
+  }
+  50% {
+    box-shadow:
+      -6px 0 0 3px rgba(var(--jinx-pink-rgb), 1),
+      -6px 0 0 11px rgba(var(--jinx-pink-rgb), 0.45),
+      calc(100% + 6px) 0 0 3px rgba(var(--jinx-cyan-rgb), 1),
+      calc(100% + 6px) 0 0 9px rgba(var(--jinx-cyan-rgb), 0.4),
+      0 0 10px rgba(var(--jinx-cyan-rgb), 0.2);
+  }
+}
+
+.container {
+  width: 95%;
+  max-width: 1150px;
+  margin: 40px auto;
+  padding: 60px;
+
+  /*
+   * SURFACE STACK (top to base)
+   * 1 & 2 — Fine 20px blueprint grid (cyan, barely-there)
+   * 3 & 4 — Major 100px grid (slightly stronger)
+   * 5     — Pink explosion bloom, lower-left (blast origin)
+   * 6     — Purple Hextech charge, upper-right
+   * 7     — Near-black with deep blue-violet tint (blueprint paper)
+   */
+  background:
+    linear-gradient(rgba(var(--jinx-cyan-rgb), 0.045) 1px, transparent 1px) 0
+      0 / 20px 20px,
+    linear-gradient(
+        90deg,
+        rgba(var(--jinx-cyan-rgb), 0.045) 1px,
+        transparent 1px
+      )
+      0 0 / 20px 20px,
+    linear-gradient(rgba(var(--jinx-cyan-rgb), 0.09) 1px, transparent 1px) 0 0 /
+      100px 100px,
+    linear-gradient(
+        90deg,
+        rgba(var(--jinx-cyan-rgb), 0.09) 1px,
+        transparent 1px
+      )
+      0 0 / 100px 100px,
+    radial-gradient(
+      ellipse at 12% 82%,
+      rgba(var(--jinx-pink-rgb), 0.14) 0%,
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 88% 22%,
+      rgba(var(--jinx-purple-rgb), 0.12) 0%,
+      transparent 45%
+    ),
+    linear-gradient(165deg, #020b14 0%, #03060e 45%, #060312 100%);
+
+  position: relative;
+  z-index: 5;
+
+  /* Shrapnel geometry — unchanged */
+  clip-path: polygon(
+  0 15px, 
+  15px 0, 
+  60% 0, 
+  62% 10px, 
+  90% 10px, 
+  100% 40px, 
+  100% calc(100% - 30px), 
+  calc(100% - 30px) 100%, 
+  40% 100%, 
+  38% calc(100% - 10px), 
+  30px calc(100% - 10px), /* 🛠️ Added a stabilization point */
+  0 calc(100% - 40px)     /* 🛠️ Replaced 85% with a fixed 40px cut */
+);
+
+  /* Dashed schematic border — technical drawing style */
+  border: 1px dashed rgba(var(--jinx-cyan-rgb), 0.45);
+
+  animation: schematic-breathe 5s ease-in-out infinite;
+  transition:
+    transform 0.35s cubic-bezier(0.19, 1, 0.22, 1),
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* TOP CIRCUIT TRACE                                           */
+/* Wiring run across the top interior with live signal pulse  */
+/* Pink node (left) ────────────────────────────── cyan node  */
+/* ─────────────────────────────────────────────────────────── */
+.container::before {
+  content: "";
+  position: absolute;
+  top: 46px;
+  left: 40px;
+  right: 55px;
+  height: 1px;
+
+  /* Dim base trace */
+  background-color: rgba(var(--jinx-cyan-rgb), 0.18);
+
+  /* Traveling signal: bright narrow stripe, no-repeat, animated position */
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(var(--jinx-cyan-rgb), 0.15) 42%,
+    rgba(var(--jinx-cyan-rgb), 0.95) 50%,
+    rgba(var(--jinx-cyan-rgb), 0.15) 58%,
+    transparent 70%,
+    transparent 100%
+  );
+  background-size: 160px 100%;
+  background-repeat: no-repeat;
+
+  animation:
+    signal-travel 2.8s linear infinite,
+    node-ping 2.8s ease-in-out infinite;
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* COMPONENT SPEC TAG                                          */
+/* Schematic annotation callout — bottom-left, pink leader    */
+/* ─────────────────────────────────────────────────────────── */
+.container::after {
+  content: "UNIT: JNX-06  //  CLASS: VOLATILE  //  YIELD: \221E";
+  position: absolute;
+  bottom: 22px;
+  left: 42px;
+
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: rgba(var(--jinx-cyan-rgb), 0.55);
+  text-shadow: 0 0 12px rgba(var(--jinx-cyan-rgb), 0.3);
+
+  /* Callout leader — pink left bar, like a schematic reference flag */
+  border-left: 2px solid rgba(var(--jinx-pink-rgb), 0.6);
+  padding-left: 10px;
+
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* HOVER: SCHEMATIC ACTIVATED                                  */
+/* Grid brightens, border goes solid, glow intensifies        */
+/* ─────────────────────────────────────────────────────────── */
+.container:hover {
+  animation: none;
+  border: 1px solid rgba(var(--jinx-cyan-rgb), 0.7);
+  transform: translateY(-4px);
+
+  /* Grid visibility bumped up on hover */
+  background:
+    linear-gradient(rgba(var(--jinx-cyan-rgb), 0.045) 1px, transparent 1px) 0
+      0 / 20px 20px,
+    linear-gradient(
+        90deg,
+        rgba(var(--jinx-cyan-rgb), 0.045) 1px,
+        transparent 1px
+      )
+      0 0 / 20px 20px,
+    linear-gradient(rgba(var(--jinx-cyan-rgb), 0.09) 1px, transparent 1px) 0 0 /
+      100px 100px,
+    linear-gradient(
+        90deg,
+        rgba(var(--jinx-cyan-rgb), 0.09) 1px,
+        transparent 1px
+      )
+      0 0 / 100px 100px,
+    radial-gradient(
+      ellipse at 12% 82%,
+      rgba(var(--jinx-pink-rgb), 0.14) 0%,
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 88% 22%,
+      rgba(var(--jinx-purple-rgb), 0.12) 0%,
+      transparent 45%
+    ),
+    linear-gradient(165deg, #020b14 0%, #03060e 45%, #060312 100%);
+
+  box-shadow:
+    /* Hard-offset block — "lifted off the blueprint" */
+    -8px 8px 0px rgba(var(--jinx-purple-rgb), 0.3),
+    0 0 35px rgba(var(--jinx-cyan-rgb), 0.22),
+    0 0 80px rgba(var(--jinx-pink-rgb), 0.1),
+    0 30px 110px rgba(0, 0, 0, 0.95),
+    inset 0 0 55px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(var(--jinx-cyan-rgb), 0.4);
+}
+
+.container:hover::after {
+  color: rgb(var(--jinx-cyan-rgb));
+  text-shadow: 0 0 18px rgba(var(--jinx-cyan-rgb), 0.6);
+  border-color: rgb(var(--jinx-pink-rgb));
+  content: "UNIT: JNX-06  //  SCHEMATIC: ACTIVE  //  STAND CLEAR";
+}
+
+/* ============================================================
+   TRAPEZOID COMMAND BAR (EDGE-TO-EDGE)
+   ============================================================ */
+header {
+  width: 100%;
+}
+
 nav {
-    width: 100%;
-    background-color: rgba(var(--bg-panel-rgb), 0.62);
-    padding: 15px 40px;
-    margin-bottom: 40px;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid rgba(var(--jinx-purple-rgb), 0.09);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 120px rgba(var(--jinx-cyan-rgb), 0.08);
-    backdrop-filter: blur(6px);
-    position: relative;
-    z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: rgba(6, 8, 12, 0.98);
+
+  background-image:
+    linear-gradient(rgba(var(--jinx-cyan-rgb), 0.04) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      rgba(var(--jinx-cyan-rgb), 0.04) 1px,
+      transparent 1px
+    );
+  background-size: 15px 15px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 0 30px;
+  z-index: 10000;
+  border-bottom: 2px solid rgb(var(--jinx-pink-rgb));
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.9);
+  transition: border-bottom-color 0.3s ease;
+}
+
+nav:has(a.op-info:hover) {
+  border-bottom-color: rgb(var(--jinx-cyan-rgb));
 }
 
 nav .logo {
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: rgb(var(--jinx-cyan-rgb));
-    text-decoration: none;
-    transition: color 0.3s ease;
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: rgb(var(--jinx-purple-rgb));
+  text-transform: uppercase;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  text-shadow: 0 0 10px rgba(var(--jinx-purple-rgb), 0.5);
 }
-nav .logo:hover { color: rgb(var(--jinx-pink-rgb)); }
-
-.hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    cursor: pointer;
-}
-.hamburger span {
-    width: 25px;
-    height: 3px;
-    background-color: rgb(var(--text-main-rgb));
-    border-radius: 3px;
-    transition: all 0.3s ease;
-}
-.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-.hamburger.active span:nth-child(2) { opacity: 0; }
-.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 
 .nav-menu {
-    display: flex;
-    list-style: none;
-    gap: 30px;
+  display: flex;
+  align-items: center;
+  list-style: none;
+  height: 100%;
+  gap: 5px;
 }
-.nav-menu li { font-weight: 600; transition: color 0.3s ease; }
+
+.nav-menu li {
+  height: 100%;
+}
+
 .nav-menu li a {
-    color: rgb(var(--text-main-rgb));
-    text-decoration: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    transition: color 0.3s ease;
+  color: rgba(var(--text-main-rgb), 0.7);
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  transition: 0.2s;
+  border-bottom: 3px solid transparent;
 }
+
+.nav-menu li a:hover,
 .nav-menu li a.active {
-    background-color: rgba(var(--jinx-purple-rgb), 0.18);
-    color: rgb(var(--jinx-purple-rgb));
-    box-shadow: 0 8px 30px rgba(var(--jinx-purple-rgb), 0.06), inset 0 -2px 8px rgba(var(--jinx-cyan-rgb), 0.03);
+  color: rgb(var(--jinx-cyan-rgb));
+  border-bottom: 3px solid rgb(var(--jinx-cyan-rgb));
+  background: linear-gradient(
+    0deg,
+    rgba(var(--jinx-cyan-rgb), 0.15) 0%,
+    transparent 100%
+  );
 }
-.nav-menu li:hover a { color: rgb(var(--jinx-pink-rgb)); }
+
+.dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 60px;
+  background: #080a0e;
+  border: 1px solid rgb(var(--jinx-cyan-rgb));
+  border-top: none;
+  min-width: 220px;
+  box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.6);
+  z-index: 10001;
+}
+
+.dropdown::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 15px;
+}
+.dropdown:hover::after,
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
+  text-decoration: none;
+  height: auto !important;
+  padding: 15px 20px !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.dropdown-content a i {
+  width: 25px;
+  color: rgb(var(--jinx-cyan-rgb));
+  margin-right: 5px;
+}
+.dropdown-content a:hover {
+  background: rgba(var(--jinx-cyan-rgb), 0.15) !important;
+}
 
 /* ============================================================
-   FOOTER
+   THE TRAPEZOID SESSION BLOCK
    ============================================================ */
-.site-footer {
-    width: 100%;
-    text-align: center;
-    padding: 20px;
-    margin-top: auto;
-    font-size: 0.9rem;
+.nav-session-block {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  background: rgb(var(--jinx-pink-rgb));
+  margin-left: 15px;
+  padding-left: 18px;
+  clip-path: polygon(25px 0, 100% 0, 100% 100%, 0% 100%);
+  transition: background-color 0.3s ease;
 }
 
-/* Responsive Nav */
-@media (max-width: 600px) {
-    .hamburger { display: flex; }
-    .nav-menu {
-        display: none;
-        flex-direction: column;
-        padding: 20px 0;
-        margin-top: 15px;
-        background-color: rgba(var(--bg-panel-rgb), 0.98);
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        text-align: center;
-        gap: 18px;
-    }
-    .nav-menu.active { display: flex; }
+.nav-session-block:has(a.op-info:hover) {
+  background: rgb(var(--jinx-cyan-rgb));
+}
+
+a.op-info {
+  height: 100%;
+  padding: 0 15px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: right;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.op-label {
+  font-size: 10px;
+  opacity: 0.8;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 1;
+  margin-bottom: 2px;
+  color: #000;
+  transition: 0.3s;
+}
+
+.op-name {
+  font-size: 18px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  line-height: 1;
+  color: #000;
+  transition: 0.3s;
+}
+
+.nav-session-block:has(a.op-info:hover) .op-label {
+  opacity: 0.6;
+}
+
+.nav-session-block:has(a.op-info:hover) .op-name {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.logout-square {
+  background: #000;
+  color: rgb(var(--danger-rgb));
+  width: 60px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.3s;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-square:hover {
+  background: rgb(var(--danger-rgb));
+  color: #fff;
+}
+
+@media (max-width: 850px) {
+  nav {
+    padding: 0 15px;
+  }
+  .nav-session-block {
+    clip-path: none;
+    padding-left: 10px;
+  }
+  .nav-menu {
+    display: none;
+  }
 }

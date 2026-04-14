@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeyJinX | Text Transcoder</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body class="auth-page">
+    <header>
+        <nav>
+            <a href="index.html" class="logo">KEYJINX</a>
+            <ul class="nav-menu" id="navMenu"></ul>
+        </nav>
+    </header>
+
+    <main class="container content-page">
+        <header class="page-header">
+            <h1>TEXT_TRANSCODER</h1>
+        </header>
+
+        <div class="auth-card" style="max-width: 700px; padding: 30px;">
+            <div class="form-group">
+                <label for="rawText">/ INPUT_DATA</label>
+                <textarea id="rawText" placeholder="> Enter plaintext or ciphertext here..." style="min-height: 150px; font-family: monospace;"></textarea>
+            </div>
+
+            <div class="form-group icon-input-group">
+                <label for="secretKey">/ TRANSCODE_KEY</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-key input-icon"></i>
+                    <input type="password" id="secretKey" placeholder="> Enter your secret passphrase...">
+                    <i class="fa-solid fa-eye toggle-password" onclick="toggleVisibility('secretKey', this)" style="cursor:pointer;"></i>
+                </div>
+                <small style="color: rgba(255,255,255,0.4); font-size: 0.75rem; display: block; margin-top: 5px;">
+                    * This key is never stored. Do not lose it.
+                </small>
+            </div>
+
+            <div class="hero-buttons" style="margin-top: 30px;">
+                <button class="btn" onclick="processText('encrypt')" style="flex: 1;">
+                    ENCRYPT <i class="fa-solid fa-lock"></i>
+                </button>
+                <button class="btn-primary" onclick="processText('decrypt')" style="flex: 1;">
+                    DECRYPT <i class="fa-solid fa-lock-open"></i>
+                </button>
+            </div>
+
+            <div id="resultArea" style="display: none; margin-top: 30px; animation: scanline 0.3s ease-out;">
+                <div class="section-title">/ OUTPUT_RESULT</div>
+                <div class="password-form" style="margin-bottom: 0;">
+                    <div class="form-group" style="position: relative;">
+                        <textarea id="outputText" readonly style="min-height: 150px; background: rgba(0,229,255,0.05); border-color: rgba(0,229,255,0.3); font-family: monospace; color: rgb(var(--jinx-cyan-rgb));"></textarea>
+                        <button class="action-btn" onclick="copyResult()" style="position: absolute; right: 10px; bottom: 10px; background: rgba(0,0,0,0.6) !important; border: 1px solid rgb(var(--jinx-cyan-rgb)) !important;">
+                            <i class="fa-solid fa-copy" style="color: rgb(var(--jinx-cyan-rgb));"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="toast"></div>
+    
+    <footer class="site-footer">
+      <p>&copy; 2026 KEYJINX. All rights reserved.</p>
+    </footer>
+    <script src="js/navbar.js"></script>
+    <script src="js/encrypt.js"></script>
+</body>
+</html>

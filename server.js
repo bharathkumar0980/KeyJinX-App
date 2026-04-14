@@ -1,4 +1,5 @@
 require('dotenv').config();
+const mongoose = require("mongoose");
 const express = require('express');
 const path = require('path');
 const connectDB = require('./config/db');
@@ -8,6 +9,7 @@ const vaultRoutes = require('./routes/vaultRoutes');
 const authRoutes = require('./routes/authRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
 connectDB();
@@ -21,6 +23,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/vault', vaultRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/profile', profileRoutes);
 
 // --- 3. STATIC FILES (THIRD) ---
 app.use(express.static(path.join(__dirname, 'public')));
@@ -38,3 +41,23 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Hextech Server humming at: http://localhost:${PORT}`);
 });
+
+const Log = require("./models/Logs"); // Adjust the path if necessary
+
+// Inside your mongoose.connect().then(...) block:
+mongoose.connect(process.env.MONGO_URI)
+  .then(async () => {
+    console.log("MongoDB Connected");
+    
+    // 🛠️ Log the server startup to the database
+    try {
+      await Log.create({
+        type: "ok",
+        code: "SYS_BOOT",
+        message: "Mainframe server initialized and connected to database."
+      });
+    } catch (err) {
+      console.error("Failed to write boot log:", err);
+    }
+  })
+  .catch(err => console.log(err));

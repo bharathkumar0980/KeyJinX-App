@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    name: {
+    type: String,
+    default: "Unknown Operative" // Gives existing users a default name
+  },
     email: {
       type: String,
       required: true,
@@ -19,6 +23,10 @@ const userSchema = new mongoose.Schema(
       default: "Client",
       enum: ["Client", "The Admin", "Leecher"],
       required: true,
+    },
+    lastSeen: {
+      type: Date,
+      default: Date.now,
     },
   },
   { timestamps: true },

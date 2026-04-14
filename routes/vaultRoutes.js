@@ -6,6 +6,7 @@ const auth = require("../middleware/authenticate"); // Import the bouncer
 // Add 'auth' as the second argument to protect these routes
 router.get("/", auth, vaultController.getPasswords);
 router.post("/", auth, vaultController.addPassword);
+router.post("/migrate", auth, vaultController.migrateVault);
 router.delete("/:id", auth, vaultController.deletePassword);
 router.put('/:id', auth, vaultController.updateVaultEntry);
 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeyJinX | Image Cipher</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body class="auth-page">
+    <header><nav><a href="index.html" class="logo">KEYJINX</a><ul class="nav-menu" id="navMenu"></ul></nav></header>
+
+    <main class="container content-page">
+        <header class="page-header"><h1>IMAGE_CIPHER</h1></header>
+
+        <div class="auth-card" style="max-width: 800px; padding: 30px;">
+            <div class="form-group">
+                <label for="imageInput">/ UPLOAD_IMAGE_OR_CIPHER</label>
+                <input type="file" id="imageInput" class="hud-input" accept="image/*,.kjx" style="border-style: dashed;">
+            </div>
+
+            <div class="form-group icon-input-group">
+                <label for="cipherKey">/ ENCRYPTION_KEY</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-key input-icon"></i>
+                    <input type="password" id="cipherKey" placeholder="> Enter secret key to lock/unlock...">
+                </div>
+            </div>
+
+            <div class="hero-buttons" style="margin-top: 30px;">
+                <button class="btn" onclick="processImage('encrypt')" style="flex: 1;">
+                    LOCK IMAGE <i class="fa-solid fa-file-shield"></i>
+                </button>
+                <button class="btn-primary" onclick="processImage('decrypt')" style="flex: 1;">
+                    UNLOCK IMAGE <i class="fa-solid fa-unlock-keyhole"></i>
+                </button>
+            </div>
+
+            <div id="outputContainer" style="display: none; margin-top: 30px; text-align: center; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 20px;">
+                <div class="section-title">/ OUTPUT_PREVIEW</div>
+                <img id="imagePreview" style="max-width: 100%; border-radius: 8px; border: 2px solid rgb(var(--jinx-cyan-rgb)); margin-bottom: 20px; display: none;">
+                <div id="downloadLinkContainer"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="toast"></div>
+
+    <footer class="site-footer">
+      <p>&copy; 2026 KEYJINX. All rights reserved.</p>
+    </footer>
+    <script src="js/navbar.js"></script>
+    <script src="js/image_cipher.js"></script>
+</body>
+</html>

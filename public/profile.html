@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KEYJINX // OPERATIVE_PROFILE</title>
+    
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <style>
+      /* --- HUD SPECIFIC STYLES --- */
+      .dossier-wrapper {
+        background: rgba(6, 8, 12, 0.85);
+        border: 1px solid rgba(var(--jinx-cyan-rgb), 0.3);
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(var(--jinx-cyan-rgb), 0.05);
+        backdrop-filter: blur(10px);
+        max-width: 550px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .dossier-header {
+        display: flex; align-items: center; gap: 20px; margin-bottom: 30px; 
+        padding-bottom: 20px; border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+      }
+
+      .avatar-ring {
+        width: 70px; height: 70px; border-radius: 50%; background: rgba(var(--jinx-purple-rgb), 0.1);
+        border: 2px solid rgb(var(--jinx-purple-rgb)); display: flex; justify-content: center;
+        align-items: center; font-size: 30px; color: rgb(var(--jinx-purple-rgb));
+        box-shadow: 0 0 15px rgba(var(--jinx-purple-rgb), 0.4);
+      }
+
+      .clearance-badge {
+        display: inline-block; margin-top: 15px; padding: 4px 10px; font-size: 10px;
+        font-family: var(--font-mono); font-weight: bold; background: rgba(var(--jinx-cyan-rgb), 0.15);
+        border: 1px solid rgb(var(--jinx-cyan-rgb)); color: rgb(var(--jinx-cyan-rgb));
+        border-radius: 4px; letter-spacing: 0.1em;
+      }
+
+      /* --- DATA MODULES --- */
+      .data-module {
+        background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 8px; padding: 18px; margin-bottom: 15px; position: relative;
+        overflow: hidden; transition: all 0.3s ease;
+      }
+      .data-module:hover { background: rgba(255, 255, 255, 0.02); }
+
+      .data-module::before {
+        content: ''; position: absolute; left: 0; top: 0; width: 3px; height: 100%;
+        background: rgb(var(--jinx-cyan-rgb)); box-shadow: 0 0 10px rgb(var(--jinx-cyan-rgb));
+      }
+      .mod-purple::before { background: rgb(var(--jinx-purple-rgb)); box-shadow: 0 0 10px rgb(var(--jinx-purple-rgb)); }
+      .mod-pink::before { background: rgb(var(--jinx-pink-rgb)); box-shadow: 0 0 10px rgb(var(--jinx-pink-rgb)); }
+
+      .module-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+
+      .m-label {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      .m-value { font-size: 1.1rem; font-weight: bold; color: rgb(var(--text-main-rgb)); letter-spacing: 1px; }
+
+      .edit-trigger {
+        background: transparent; border: none; color: rgba(255, 255, 255, 0.4);
+        cursor: pointer; font-size: 14px; transition: 0.2s; padding: 5px;
+      }
+      .edit-trigger:hover { color: rgb(var(--jinx-cyan-rgb)); text-shadow: 0 0 8px rgb(var(--jinx-cyan-rgb)); transform: scale(1.1); }
+
+      .module-edit { display: none; margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
+      .module-edit.active { display: block; animation: scanline 0.3s ease-out; }
+
+      @keyframes scanline { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+      .hud-input {
+        width: 100%; background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
+        border-left: 2px solid rgb(var(--jinx-cyan-rgb)); color: rgb(var(--jinx-cyan-rgb));
+        padding: 12px; font-family: var(--font-mono); font-size: 14px; border-radius: 4px;
+        outline: none; transition: 0.3s; margin-bottom: 10px;
+      }
+      .hud-input:focus { border-color: rgb(var(--jinx-cyan-rgb)); box-shadow: 0 0 10px rgba(var(--jinx-cyan-rgb), 0.2); }
+      .hud-input::placeholder { color: rgba(var(--jinx-cyan-rgb), 0.3); }
+
+      .hud-actions { display: flex; gap: 10px; }
+      .hud-actions .btn-sm { flex: 1; padding: 8px; font-size: 12px; }
+
+      #msgBox {
+        font-size: 0.9rem; margin-bottom: 20px; text-align: center; display: none; padding: 12px; 
+        border-radius: 6px; font-family: var(--font-mono); background: rgba(0,0,0,0.8); letter-spacing: 0.05em;
+      }
+      .msg-success { color: rgb(var(--jinx-cyan-rgb)); border: 1px solid rgb(var(--jinx-cyan-rgb)); box-shadow: 0 0 15px rgba(var(--jinx-cyan-rgb), 0.2); }
+      .msg-error { color: rgb(var(--jinx-pink-rgb)); border: 1px solid rgb(var(--jinx-pink-rgb)); box-shadow: 0 0 15px rgba(var(--jinx-pink-rgb), 0.2); }
+
+      .hud-input-wrapper { position: relative; margin-bottom: 10px; }
+      .hud-input-wrapper .hud-input { margin-bottom: 0; padding-right: 40px; }
+      .hud-input-wrapper .toggle-password {
+        position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+        cursor: pointer; color: rgba(255, 255, 255, 0.4); transition: 0.3s;
+      }
+      .hud-input-wrapper .toggle-password:hover, .hud-input-wrapper .toggle-password.active {
+        color: rgb(var(--jinx-pink-rgb)); text-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.8); opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="index.html" class="logo">KEYJINX</a>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+        <ul class="nav-menu" id="navMenu"></ul>
+      </nav>
+    </header>
+
+    <main class="container content-page">
+      <header class="page-header">
+        <h1>OPERATIVE PROFILE</h1>
+      </header>
+
+      <div class="dossier-wrapper">
+        <div id="msgBox"></div>
+
+        <div class="dossier-header">
+          <div class="avatar-ring">
+            <i class="fa-solid fa-id-card-clip"></i>
+          </div>
+          <div class="dossier-meta">
+            <h2>OPERATIVE_ID</h2>
+            <span class="clearance-badge" id="roleDisplay">SYNCING...</span>
+          </div>
+        </div>
+
+        <div class="data-module mod-purple">
+          <div class="module-header">
+            <span class="m-label">/ NAME</span>
+            <button class="edit-trigger" onclick="toggleEdit('name')"><i class="fa-solid fa-pen-to-square"></i></button>
+          </div>
+          <div id="row-name" style="display: flex; align-items: center;">
+            <span class="m-value" id="val-name">Loading...</span>
+          </div>
+          <div class="module-edit" id="edit-name">
+            <input type="text" id="input-name" class="hud-input" placeholder="> Enter new designation..." />
+            <div class="hud-actions">
+              <button class="btn-sm" style="color: rgb(var(--jinx-purple-rgb)); border-color: rgb(var(--jinx-purple-rgb));" onclick="saveField('name')">ACCEPT</button>
+              <button class="btn-sm danger" onclick="toggleEdit('name')">ABORT</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="data-module">
+          <div class="module-header">
+            <span class="m-label">/ ORIGIN_EMAIL</span>
+            <button class="edit-trigger" onclick="toggleEdit('email')"><i class="fa-solid fa-pen-to-square"></i></button>
+          </div>
+          <div id="row-email" style="display: flex; align-items: center;">
+            <span class="m-value" id="val-email" style="color: rgb(var(--jinx-cyan-rgb));">Loading...</span>
+          </div>
+          <div class="module-edit" id="edit-email">
+            <input type="email" id="input-email" class="hud-input" placeholder="> Enter new email..." />
+            <div class="hud-actions">
+              <button class="btn-sm" onclick="saveField('email')">ACCEPT</button>
+              <button class="btn-sm danger" onclick="toggleEdit('email')">ABORT</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="data-module mod-pink">
+          <div class="module-header">
+            <span class="m-label">/ MASTER_CREDENTIAL</span>
+            <button class="edit-trigger" onclick="toggleEdit('password')"><i class="fa-solid fa-pen-to-square"></i></button>
+          </div>
+          <div id="row-password" style="display: flex; align-items: center; gap: 10px;">
+            <span class="m-value">••••••••••••••••</span>
+            <i class="fa-solid fa-shield-check" style="color: rgb(var(--jinx-pink-rgb)); font-size: 14px;"></i>
+          </div>
+          <div class="module-edit" id="edit-password">
+            <div class="hud-input-wrapper">
+              <input type="password" id="input-curr-pass" class="hud-input" style="border-left-color: rgb(var(--jinx-pink-rgb)); color: rgb(var(--jinx-pink-rgb));" placeholder="> Verify Current Password..." />
+              <i class="fa-solid fa-eye toggle-password" onclick="toggleVisibility('input-curr-pass', this)"></i>
+            </div>
+            <div class="hud-input-wrapper">
+              <input type="password" id="input-new-pass" class="hud-input" style="border-left-color: rgb(var(--jinx-pink-rgb)); color: rgb(var(--jinx-pink-rgb));" placeholder="> Enter New Password..." />
+              <i class="fa-solid fa-eye toggle-password" onclick="toggleVisibility('input-new-pass', this)"></i>
+            </div>
+            <div class="hud-input-wrapper">
+              <input type="password" id="input-confirm-pass" class="hud-input" style="border-left-color: rgb(var(--jinx-pink-rgb)); color: rgb(var(--jinx-pink-rgb));" placeholder="> Confirm New Password..." />
+              <i class="fa-solid fa-eye toggle-password" onclick="toggleVisibility('input-confirm-pass', this)"></i>
+            </div>
+            <div class="hud-actions">
+              <button class="btn-sm" style="color: rgb(var(--jinx-pink-rgb)); border-color: rgb(var(--jinx-pink-rgb));" onclick="saveField('password')">FORGE KEY</button>
+              <button class="btn-sm danger" onclick="toggleEdit('password')">ABORT</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 25px; text-align: center;">
+          <a href="#" onclick="window.history.back(); return false;" style="color: rgba(255,255,255,0.5); text-decoration: none; font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px; transition: 0.3s;">
+            <i class="fa-solid fa-angles-left"></i> RETURN TO SYSTEM
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; 2026 KEYJINX. All rights reserved.</p>
+    </footer>
+
+    <script src="js/navbar.js"></script>
+    <script src="js/profile.js"></script>
+    <script>
+      function toggleVisibility(inputId, iconElement) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+          input.type = "text";
+          iconElement.classList.remove("fa-eye");
+          iconElement.classList.add("fa-eye-slash");
+          iconElement.classList.add("active");
+        } else {
+          input.type = "password";
+          iconElement.classList.remove("fa-eye-slash");
+          iconElement.classList.add("fa-eye");
+          iconElement.classList.remove("active");
+        }
+      }
+    </script>
+  </body>
+</html>

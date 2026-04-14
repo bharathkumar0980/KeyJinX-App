@@ -1,15 +1,45 @@
 // ==========================================
 // KeyJinX Vault - Frontend Client Logic
+// (Zero-Knowledge Architecture Enabled)
 // ==========================================
 
 // 1. Fetch and Display Passwords from MongoDB Cloud
 async function showPasswords() {
-  const table = document.querySelector("table");
-
   const token = localStorage.getItem("keyjinx_token");
+
+  // 🛠️ FIX 2: If the name isn't in the cache, fetch it from the profile
+  if (!localStorage.getItem("keyjinx_user_name")) {
+    try {
+      const profileRes = await fetch("/api/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const profileData = await profileRes.json();
+
+      if (profileRes.ok && profileData.name) {
+        // Save "Bharath" to local storage
+        localStorage.setItem("keyjinx_user_name", profileData.name);
+        // Refresh the navbar display
+        location.reload();
+      }
+    } catch (err) {
+      console.error("Identity sync failed", err);
+    }
+  }
+  const table = document.querySelector("table");
+  const vaultKey = sessionStorage.getItem("keyjinx_vault_key"); // 🛠️ ZERO-KNOWLEDGE: Get the decryption key
 
   if (!token) {
     console.warn("No token found, redirecting to login...");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // 🛠️ ZERO-KNOWLEDGE: If they have a token but no memory key (e.g., opened a new tab), force re-login
+  if (!vaultKey) {
+    console.warn(
+      "No decryption key found in active memory. Forcing re-authentication.",
+    );
+    localStorage.removeItem("keyjinx_token");
     window.location.href = "login.html";
     return;
   }
@@ -22,16 +52,16 @@ async function showPasswords() {
       },
     });
 
-    // If the server says "Who are you?" (401 or 403), kick them out to login
     if (response.status === 401 || response.status === 403) {
       localStorage.removeItem("keyjinx_token");
+      sessionStorage.removeItem("keyjinx_vault_key");
       window.location.href = "login.html";
       return;
     }
 
-    const data = await response.json();
+    const rawData = await response.json();
 
-    if (data.length === 0) {
+    if (rawData.length === 0) {
       table.innerHTML = `
                 <tr>
                     <th>Website</th>
@@ -44,7 +74,21 @@ async function showPasswords() {
       return;
     }
 
-    // Build the table headers
+    // 🛠️ ZERO-KNOWLEDGE: Decrypt the ciphertext arriving from the server
+    const decryptedData = rawData.map((entry) => {
+      try {
+        const bytes = CryptoJS.AES.decrypt(entry.password, vaultKey);
+        const plainPassword = bytes.toString(CryptoJS.enc.Utf8);
+
+        if (!plainPassword) throw new Error("Decryption failed");
+
+        return { ...entry, password: plainPassword };
+      } catch (err) {
+        // If a password was encrypted with an old master password
+        return { ...entry, password: "CORRUPTED_DATA" };
+      }
+    });
+
     let str = `
             <tr>
                 <th>Website</th>
@@ -54,8 +98,8 @@ async function showPasswords() {
             </tr>
         `;
 
-    // Loop through the MongoDB data
-    data.forEach((element) => {
+    // Loop through the Decrypted Data
+    decryptedData.forEach((element) => {
       str += `
     <tr>
         <td>${element.website}</td>
@@ -68,7 +112,7 @@ async function showPasswords() {
                     <button class="action-btn" title="Toggle Visibility" onclick="toggleMask('${element._id}', this)">
                         <i class="fa-solid fa-eye"></i>
                     </button>
-                    <button class="action-btn" title="Copy" onclick="copyPassword('${element.password}')">
+                    <button class="action-btn" title="Copy" onclick="copyPassword('${element.password.replace(/'/g, "\\'")}')">
                         <i class="fa-solid fa-copy"></i>
                     </button>
                 </div>
@@ -99,14 +143,25 @@ document.querySelector("form").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const token = localStorage.getItem("keyjinx_token");
+  const vaultKey = sessionStorage.getItem("keyjinx_vault_key"); // 🛠️ ZERO-KNOWLEDGE: Get the encryption key
+
+  if (!vaultKey) {
+    showToast("Encryption key lost. Please log in again.", "error");
+    setTimeout(() => (window.location.href = "login.html"), 1500);
+    return;
+  }
+
   const website = document.getElementById("website").value;
   const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+  const rawPassword = document.getElementById("password").value;
 
-  // We check if the form has a 'dataset.editId' (set by the editEntry function)
+  // 🛠️ ZERO-KNOWLEDGE: Encrypt the password BEFORE it leaves the browser
+  const encryptedPassword = CryptoJS.AES.encrypt(
+    rawPassword,
+    vaultKey,
+  ).toString();
+
   const editId = e.target.dataset.editId;
-
-  // Decide the Method and URL based on whether we are editing or creating
   const method = editId ? "PUT" : "POST";
   const url = editId ? `/api/vault/${editId}` : "/api/vault";
 
@@ -117,20 +172,22 @@ document.querySelector("form").addEventListener("submit", async function (e) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ website, username, password }),
+      // 🛠️ ZERO-KNOWLEDGE: Send the ciphertext, not the raw password
+      body: JSON.stringify({ website, username, password: encryptedPassword }),
     });
 
     if (response.ok) {
-      e.target.reset(); // Clear inputs
+      e.target.reset();
 
-      // RESET UI FROM EDIT MODE
-      delete e.target.dataset.editId; // Remove the ID so next submit is a 'Save'
+      delete e.target.dataset.editId;
 
       const submitBtn = e.target.querySelector("button");
-      submitBtn.innerHTML = `Submit <i class="fa-solid fa-floppy-disk"></i>`; // Change back to "Submit"
+      submitBtn.innerHTML = `Submit <i class="fa-solid fa-floppy-disk"></i>`;
 
       showToast(
-        editId ? "Vault entry updated!" : "Credential locked in the Cloud!",
+        editId
+          ? "Vault entry updated!"
+          : "Credential encrypted & locked in the Cloud!",
       );
 
       showPasswords();
@@ -190,12 +247,10 @@ function toggleMask(id, btn) {
   const icon = btn.querySelector("i");
 
   if (textSpan.classList.contains("masked")) {
-    // Switch to UNMASKED
     textSpan.classList.remove("masked");
     textSpan.classList.add("unmasked");
     icon.classList.replace("fa-eye", "fa-eye-slash");
   } else {
-    // Switch back to MASKED
     textSpan.classList.remove("unmasked");
     textSpan.classList.add("masked");
     icon.classList.replace("fa-eye-slash", "fa-eye");
@@ -206,12 +261,10 @@ function toggleMask(id, btn) {
 function showToast(message, type = "success") {
   let toast = document.getElementById("toast");
 
-  // Create the toast element if it doesn't exist in the HTML
   if (!toast) {
     toast = document.createElement("div");
     toast.id = "toast";
 
-    // Basic inline styles so it works even without CSS updates
     toast.style.position = "fixed";
     toast.style.bottom = "20px";
     toast.style.right = "20px";
@@ -229,7 +282,6 @@ function showToast(message, type = "success") {
   toast.style.backgroundColor = type === "error" ? "#ff4c4c" : "#4caf50";
   toast.style.opacity = "1";
 
-  // Fade out after 3 seconds
   setTimeout(() => {
     toast.style.opacity = "0";
   }, 3000);
@@ -239,19 +291,16 @@ function showToast(message, type = "success") {
 function editEntry(id, website, username) {
   document.getElementById("website").value = website;
   document.getElementById("username").value = username;
-  document.getElementById("password").value = ""; // Force them to enter a new password or the old one
+  document.getElementById("password").value = "";
   const form = document.getElementById("passwordForm");
 
-  // Change the form button to "Update" instead of "Save"
   const submitBtn = form.querySelector("button");
   submitBtn.innerHTML = `Update Entry <i class="fa-solid fa-rotate"></i>`;
 
-  // Store the ID globally so the form knows we are UPDATING, not SAVING NEW
   form.dataset.editId = id;
 }
 
 // Initialize the app by fetching data immediately
-// Only run vault logic if the page actually contains the vault table
 if (document.querySelector("table") || document.querySelector(".vault-table")) {
   showPasswords();
 }
