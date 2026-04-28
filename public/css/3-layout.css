@@ -1,80 +1,13 @@
 /* ============================================================
-   LAYOUT CONTAINERS
+   [3] STRUCTURAL LAYOUT CONTAINERS
    ============================================================ */
-body {
-  padding-top: 80px;
-}
-
-/* ============================================================
-   JINX SCHEMATIC CORE (.container)
-   Blueprint grid + wiring trace + explosive origin mark
-   ============================================================ */
-
-/* Slow ambient glow breathe between cyan and pink */
-@keyframes schematic-breathe {
-  0%,
-  100% {
-    box-shadow:
-      0 0 25px rgba(var(--jinx-cyan-rgb), 0.12),
-      0 0 60px rgba(var(--jinx-purple-rgb), 0.08),
-      0 20px 90px rgba(0, 0, 0, 0.92),
-      inset 0 0 55px rgba(0, 0, 0, 0.65),
-      inset 0 1px 0 rgba(var(--jinx-cyan-rgb), 0.15);
-  }
-  50% {
-    box-shadow:
-      0 0 30px rgba(var(--jinx-pink-rgb), 0.12),
-      0 0 70px rgba(var(--jinx-purple-rgb), 0.1),
-      0 20px 90px rgba(0, 0, 0, 0.92),
-      inset 0 0 55px rgba(0, 0, 0, 0.65),
-      inset 0 1px 0 rgba(var(--jinx-pink-rgb), 0.12);
-  }
-}
-
-/* Signal pulse traveling left-to-right along the trace wire */
-@keyframes signal-travel {
-  0% {
-    background-position: -200px 0;
-  }
-  100% {
-    background-position: calc(100% + 200px) 0;
-  }
-}
-
-/* Connector node ping at ends of trace */
-@keyframes node-ping {
-  0%,
-  100% {
-    box-shadow:
-      -6px 0 0 3px rgba(var(--jinx-pink-rgb), 0.9),
-      -6px 0 0 6px rgba(var(--jinx-pink-rgb), 0.25),
-      calc(100% + 6px) 0 0 3px rgba(var(--jinx-cyan-rgb), 0.8),
-      0 0 10px rgba(var(--jinx-cyan-rgb), 0.12);
-  }
-  50% {
-    box-shadow:
-      -6px 0 0 3px rgba(var(--jinx-pink-rgb), 1),
-      -6px 0 0 11px rgba(var(--jinx-pink-rgb), 0.45),
-      calc(100% + 6px) 0 0 3px rgba(var(--jinx-cyan-rgb), 1),
-      calc(100% + 6px) 0 0 9px rgba(var(--jinx-cyan-rgb), 0.4),
-      0 0 10px rgba(var(--jinx-cyan-rgb), 0.2);
-  }
-}
-
 .container {
   width: 95%;
   max-width: 1150px;
   margin: 40px auto;
   padding: 60px;
-
-  /*
-   * SURFACE STACK (top to base)
-   * 1 & 2 — Fine 20px blueprint grid (cyan, barely-there)
-   * 3 & 4 — Major 100px grid (slightly stronger)
-   * 5     — Pink explosion bloom, lower-left (blast origin)
-   * 6     — Purple Hextech charge, upper-right
-   * 7     — Near-black with deep blue-violet tint (blueprint paper)
-   */
+  position: relative;
+  z-index: 5;
   background:
     linear-gradient(rgba(var(--jinx-cyan-rgb), 0.045) 1px, transparent 1px) 0
       0 / 20px 20px,
@@ -103,29 +36,21 @@ body {
       transparent 45%
     ),
     linear-gradient(165deg, #020b14 0%, #03060e 45%, #060312 100%);
-
-  position: relative;
-  z-index: 5;
-
-  /* Shrapnel geometry — unchanged */
   clip-path: polygon(
-  0 15px, 
-  15px 0, 
-  60% 0, 
-  62% 10px, 
-  90% 10px, 
-  100% 40px, 
-  100% calc(100% - 30px), 
-  calc(100% - 30px) 100%, 
-  40% 100%, 
-  38% calc(100% - 10px), 
-  30px calc(100% - 10px), /* 🛠️ Added a stabilization point */
-  0 calc(100% - 40px)     /* 🛠️ Replaced 85% with a fixed 40px cut */
-);
-
-  /* Dashed schematic border — technical drawing style */
+    0 15px,
+    15px 0,
+    60% 0,
+    62% 10px,
+    90% 10px,
+    100% 40px,
+    100% calc(100% - 30px),
+    calc(100% - 30px) 100%,
+    40% 100%,
+    38% calc(100% - 10px),
+    30px calc(100% - 10px),
+    0 calc(100% - 40px)
+  );
   border: 1px dashed rgba(var(--jinx-cyan-rgb), 0.45);
-
   animation: schematic-breathe 5s ease-in-out infinite;
   transition:
     transform 0.35s cubic-bezier(0.19, 1, 0.22, 1),
@@ -133,11 +58,6 @@ body {
     background 0.3s ease;
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/* TOP CIRCUIT TRACE                                           */
-/* Wiring run across the top interior with live signal pulse  */
-/* Pink node (left) ────────────────────────────── cyan node  */
-/* ─────────────────────────────────────────────────────────── */
 .container::before {
   content: "";
   position: absolute;
@@ -145,11 +65,7 @@ body {
   left: 40px;
   right: 55px;
   height: 1px;
-
-  /* Dim base trace */
   background-color: rgba(var(--jinx-cyan-rgb), 0.18);
-
-  /* Traveling signal: bright narrow stripe, no-repeat, animated position */
   background-image: linear-gradient(
     90deg,
     transparent 0%,
@@ -162,80 +78,35 @@ body {
   );
   background-size: 160px 100%;
   background-repeat: no-repeat;
-
   animation:
     signal-travel 2.8s linear infinite,
     node-ping 2.8s ease-in-out infinite;
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/* COMPONENT SPEC TAG                                          */
-/* Schematic annotation callout — bottom-left, pink leader    */
-/* ─────────────────────────────────────────────────────────── */
 .container::after {
   content: "UNIT: JNX-06  //  CLASS: VOLATILE  //  YIELD: \221E";
   position: absolute;
   bottom: 22px;
   left: 42px;
-
   font-family: var(--font-mono);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 2.5px;
   color: rgba(var(--jinx-cyan-rgb), 0.55);
   text-shadow: 0 0 12px rgba(var(--jinx-cyan-rgb), 0.3);
-
-  /* Callout leader — pink left bar, like a schematic reference flag */
   border-left: 2px solid rgba(var(--jinx-pink-rgb), 0.6);
   padding-left: 10px;
-
   transition:
     color 0.3s ease,
     text-shadow 0.3s ease,
     border-color 0.3s ease;
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/* HOVER: SCHEMATIC ACTIVATED                                  */
-/* Grid brightens, border goes solid, glow intensifies        */
-/* ─────────────────────────────────────────────────────────── */
 .container:hover {
   animation: none;
   border: 1px solid rgba(var(--jinx-cyan-rgb), 0.7);
   transform: translateY(-4px);
-
-  /* Grid visibility bumped up on hover */
-  background:
-    linear-gradient(rgba(var(--jinx-cyan-rgb), 0.045) 1px, transparent 1px) 0
-      0 / 20px 20px,
-    linear-gradient(
-        90deg,
-        rgba(var(--jinx-cyan-rgb), 0.045) 1px,
-        transparent 1px
-      )
-      0 0 / 20px 20px,
-    linear-gradient(rgba(var(--jinx-cyan-rgb), 0.09) 1px, transparent 1px) 0 0 /
-      100px 100px,
-    linear-gradient(
-        90deg,
-        rgba(var(--jinx-cyan-rgb), 0.09) 1px,
-        transparent 1px
-      )
-      0 0 / 100px 100px,
-    radial-gradient(
-      ellipse at 12% 82%,
-      rgba(var(--jinx-pink-rgb), 0.14) 0%,
-      transparent 48%
-    ),
-    radial-gradient(
-      ellipse at 88% 22%,
-      rgba(var(--jinx-purple-rgb), 0.12) 0%,
-      transparent 45%
-    ),
-    linear-gradient(165deg, #020b14 0%, #03060e 45%, #060312 100%);
-
   box-shadow:
-    /* Hard-offset block — "lifted off the blueprint" */
     -8px 8px 0px rgba(var(--jinx-purple-rgb), 0.3),
     0 0 35px rgba(var(--jinx-cyan-rgb), 0.22),
     0 0 80px rgba(var(--jinx-pink-rgb), 0.1),
@@ -243,7 +114,6 @@ body {
     inset 0 0 55px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 rgba(var(--jinx-cyan-rgb), 0.4);
 }
-
 .container:hover::after {
   color: rgb(var(--jinx-cyan-rgb));
   text-shadow: 0 0 18px rgba(var(--jinx-cyan-rgb), 0.6);
@@ -251,9 +121,6 @@ body {
   content: "UNIT: JNX-06  //  SCHEMATIC: ACTIVE  //  STAND CLEAR";
 }
 
-/* ============================================================
-   TRAPEZOID COMMAND BAR (EDGE-TO-EDGE)
-   ============================================================ */
 header {
   width: 100%;
 }
@@ -265,7 +132,6 @@ nav {
   width: 100%;
   height: 60px;
   background-color: rgba(6, 8, 12, 0.98);
-
   background-image:
     linear-gradient(rgba(var(--jinx-cyan-rgb), 0.04) 1px, transparent 1px),
     linear-gradient(
@@ -274,7 +140,6 @@ nav {
       transparent 1px
     );
   background-size: 15px 15px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -284,11 +149,9 @@ nav {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.9);
   transition: border-bottom-color 0.3s ease;
 }
-
 nav:has(a.op-info:hover) {
   border-bottom-color: rgb(var(--jinx-cyan-rgb));
 }
-
 nav .logo {
   font-size: 1.6rem;
   font-weight: 900;
@@ -307,11 +170,9 @@ nav .logo {
   height: 100%;
   gap: 5px;
 }
-
 .nav-menu li {
   height: 100%;
 }
-
 .nav-menu li a {
   color: rgba(var(--text-main-rgb), 0.7);
   padding: 0 20px;
@@ -322,7 +183,6 @@ nav .logo {
   transition: 0.2s;
   border-bottom: 3px solid transparent;
 }
-
 .nav-menu li a:hover,
 .nav-menu li a.active {
   color: rgb(var(--jinx-cyan-rgb));
@@ -340,7 +200,6 @@ nav .logo {
   align-items: center;
   height: 100%;
 }
-
 .dropdown-content {
   display: none;
   position: absolute;
@@ -352,7 +211,6 @@ nav .logo {
   box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.6);
   z-index: 10001;
 }
-
 .dropdown::after {
   content: "";
   position: absolute;
@@ -365,7 +223,6 @@ nav .logo {
 .dropdown:hover .dropdown-content {
   display: block;
 }
-
 .dropdown-content a {
   text-decoration: none;
   height: auto !important;
@@ -373,7 +230,6 @@ nav .logo {
   background: transparent !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
-
 .dropdown-content a i {
   width: 25px;
   color: rgb(var(--jinx-cyan-rgb));
@@ -383,9 +239,7 @@ nav .logo {
   background: rgba(var(--jinx-cyan-rgb), 0.15) !important;
 }
 
-/* ============================================================
-   THE TRAPEZOID SESSION BLOCK
-   ============================================================ */
+/* Session Block */
 .nav-session-block {
   display: flex;
   align-items: center;
@@ -396,11 +250,9 @@ nav .logo {
   clip-path: polygon(25px 0, 100% 0, 100% 100%, 0% 100%);
   transition: background-color 0.3s ease;
 }
-
 .nav-session-block:has(a.op-info:hover) {
   background: rgb(var(--jinx-cyan-rgb));
 }
-
 a.op-info {
   height: 100%;
   padding: 0 15px 0 0;
@@ -411,7 +263,6 @@ a.op-info {
   text-decoration: none;
   cursor: pointer;
 }
-
 .op-label {
   font-size: 10px;
   opacity: 0.8;
@@ -422,7 +273,6 @@ a.op-info {
   color: #000;
   transition: 0.3s;
 }
-
 .op-name {
   font-size: 18px;
   font-weight: 900;
@@ -431,15 +281,12 @@ a.op-info {
   color: #000;
   transition: 0.3s;
 }
-
 .nav-session-block:has(a.op-info:hover) .op-label {
   opacity: 0.6;
 }
-
 .nav-session-block:has(a.op-info:hover) .op-name {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
 }
-
 .logout-square {
   background: #000;
   color: rgb(var(--danger-rgb));
@@ -453,21 +300,141 @@ a.op-info {
   transition: 0.3s;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .logout-square:hover {
   background: rgb(var(--danger-rgb));
   color: #fff;
 }
 
+/* Content Page Alignment Override */
+.content-page {
+  text-align: left !important;
+}
+.about-content > h1 {
+  text-align: center;
+}
+.about-content h2 {
+  text-align: left !important;
+  transform: none !important;
+  margin: 25px 0 10px !important;
+  padding: 0 !important;
+}
+.about-content h2::after {
+  left: 0;
+  bottom: -6px;
+  transform: rotate(-2deg);
+}
+.about-text p,
+.contact-intro p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  text-align: left;
+}
+/* ============================================================
+   MOBILE NAVIGATION & HAMBURGER MENU (PURE TEXT)
+   ============================================================ */
+/* Hide the mobile text list on Desktop */
+.mobile-item {
+  display: none !important;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  cursor: pointer;
+  z-index: 10001;
+}
+.hamburger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: rgb(var(--jinx-cyan-rgb));
+  border-radius: 3px;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.hamburger.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+  background-color: rgb(var(--jinx-pink-rgb));
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+  background-color: rgb(var(--jinx-pink-rgb));
+}
+
+/* Mobile View Adjustments */
 @media (max-width: 850px) {
   nav {
-    padding: 0 15px;
+    padding: 0 20px !important;
   }
-  .nav-session-block {
-    clip-path: none;
-    padding-left: 10px;
+  .hamburger {
+    display: flex !important;
   }
+
+  /* Kill the Desktop Menu entirely on small screens */
+  .desktop-item {
+    display: none !important;
+  }
+
+  /* Show the Mobile Text Menu */
+  .mobile-item {
+    display: block !important;
+    width: 100%;
+  }
+  /* Full Screen Mobile Menu Overlay - Forced Solid Background */
   .nav-menu {
-    display: none;
+    position: fixed !important;
+    top: 60px !important;
+    left: -100% !important;
+    width: 100% !important; /* FIX: Changed from 100vw to 100% to respect scrollbars */
+    height: calc(100vh - 60px) !important;
+    background-color: #080a0e !important;
+    background-image:
+      linear-gradient(rgba(var(--jinx-cyan-rgb), 0.04) 1px, transparent 1px),
+      linear-gradient(
+        90deg,
+        rgba(var(--jinx-cyan-rgb), 0.04) 1px,
+        transparent 1px
+      ) !important;
+    background-size: 15px 15px !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding-top: 40px !important;
+    padding-bottom: 60px !important; /* FIX: Added bottom padding so the button clears the edge */
+    overflow-y: auto !important; /* FIX: Allows the menu to scroll internally on small screens */
+    overflow-x: hidden !important; /* FIX: Prevents horizontal scrolling */
+    transition: left 0.4s cubic-bezier(0.19, 1, 0.22, 1) !important;
+    z-index: 9999 !important;
+  }
+
+  /* Slide in trigger */
+  .nav-menu.active {
+    left: 0 !important;
+  }
+
+  .nav-menu li {
+    height: auto !important;
+    margin-bottom: 25px !important;
+    width: 100% !important;
+  }
+
+  /* Force Mono Font and Text Styling */
+  .nav-menu li a {
+    text-decoration: none;
+    font-family: var(--font-mono), "Consolas", monospace !important;
+    font-size: 1.35rem !important;
+    font-weight: bold !important;
+    letter-spacing: 3px !important;
+    padding: 0px 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    background: transparent !important;
+    text-transform: uppercase !important;
   }
 }

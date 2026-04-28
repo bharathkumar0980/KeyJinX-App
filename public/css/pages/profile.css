@@ -1,4 +1,6 @@
-/* --- HUD SPECIFIC STYLES --- */
+/* ============================================================
+   [PAGE] OPERATIVE PROFILE HUD
+   ============================================================ */
 .dossier-wrapper {
   background: rgba(6, 8, 12, 0.85);
   border: 1px solid rgba(var(--jinx-cyan-rgb), 0.3);
@@ -7,7 +9,7 @@
   box-shadow:
     0 0 40px rgba(0, 0, 0, 0.8),
     inset 0 0 20px rgba(var(--jinx-cyan-rgb), 0.05);
-  backdrop-filter: blur(10px);
+  backdrop-filter: var(--glass-blur);
   max-width: 550px;
   width: 100%;
   margin: 0 auto;
@@ -21,7 +23,6 @@
   padding-bottom: 20px;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
 }
-
 .avatar-ring {
   width: 70px;
   height: 70px;
@@ -35,7 +36,7 @@
   color: rgb(var(--jinx-purple-rgb));
   box-shadow: 0 0 15px rgba(var(--jinx-purple-rgb), 0.4);
 }
-
+/* Stops the global H2 rotation for the profile name */
 .dossier-meta h2 {
   margin: 0;
   font-size: 1.5rem;
@@ -48,10 +49,9 @@
 .dossier-meta h2::after {
   display: none;
 }
-
 .clearance-badge {
   display: inline-block;
-  margin-top: 8px;
+  margin-top: 15px;
   padding: 4px 10px;
   font-size: 10px;
   font-family: var(--font-mono);
@@ -63,7 +63,7 @@
   letter-spacing: 0.1em;
 }
 
-/* --- DATA MODULES --- */
+/* Data Modules */
 .data-module {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -77,8 +77,6 @@
 .data-module:hover {
   background: rgba(255, 255, 255, 0.02);
 }
-
-/* Neon Accent Lines */
 .data-module::before {
   content: "";
   position: absolute;
@@ -104,16 +102,13 @@
   align-items: center;
   margin-bottom: 8px;
 }
-
-/* 🛠️ ENLARGED LABELS */
 .m-label {
   font-family: var(--font-mono);
-  font-size: 13px; /* Bumped up from 11px */
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.5);
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
-
 .m-value {
   font-size: 1.1rem;
   font-weight: bold;
@@ -121,7 +116,6 @@
   letter-spacing: 1px;
 }
 
-/* Edit Buttons */
 .edit-trigger {
   background: transparent;
   border: none;
@@ -137,7 +131,6 @@
   transform: scale(1.1);
 }
 
-/* Hidden Edit Panels */
 .module-edit {
   display: none;
   margin-top: 15px;
@@ -149,39 +142,6 @@
   animation: scanline 0.3s ease-out;
 }
 
-@keyframes scanline {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hud-input {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-left: 2px solid rgb(var(--jinx-cyan-rgb));
-  color: rgb(var(--jinx-cyan-rgb));
-  padding: 12px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  border-radius: 4px;
-  outline: none;
-  transition: 0.3s;
-  margin-bottom: 10px;
-}
-.hud-input:focus {
-  border-color: rgb(var(--jinx-cyan-rgb));
-  box-shadow: 0 0 10px rgba(var(--jinx-cyan-rgb), 0.2);
-}
-.hud-input::placeholder {
-  color: rgba(var(--jinx-cyan-rgb), 0.3);
-}
-
 .hud-actions {
   display: flex;
   gap: 10px;
@@ -190,30 +150,6 @@
   flex: 1;
   padding: 8px;
   font-size: 12px;
-}
-/* Password Visibility Toggles */
-.hud-input-wrapper {
-  position: relative;
-  margin-bottom: 10px;
-}
-.hud-input-wrapper .hud-input {
-  margin-bottom: 0;
-  padding-right: 40px;
-}
-.hud-input-wrapper .toggle-password {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: rgba(255, 255, 255, 0.4);
-  transition: 0.3s;
-}
-.hud-input-wrapper .toggle-password:hover,
-.hud-input-wrapper .toggle-password.active {
-  color: rgb(var(--jinx-pink-rgb));
-  text-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.8);
-  opacity: 1;
 }
 
 #msgBox {
@@ -236,4 +172,49 @@
   color: rgb(var(--jinx-pink-rgb));
   border: 1px solid rgb(var(--jinx-pink-rgb));
   box-shadow: 0 0 15px rgba(var(--jinx-pink-rgb), 0.2);
+}
+.hud-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 2px solid rgb(var(--jinx-cyan-rgb));
+  color: rgb(var(--jinx-cyan-rgb));
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  border-radius: 4px; /* Restored rounded corners specific to HUD */
+  outline: none;
+  transition: 0.3s;
+  margin-bottom: 10px;
+}
+.hud-input:focus {
+  border-color: rgb(var(--jinx-cyan-rgb));
+  box-shadow: 0 0 10px rgba(var(--jinx-cyan-rgb), 0.2);
+}
+.hud-input::placeholder {
+  color: rgba(var(--jinx-cyan-rgb), 0.3);
+}
+
+.hud-input-wrapper {
+  position: relative;
+  margin-bottom: 10px;
+}
+.hud-input-wrapper .hud-input {
+  margin-bottom: 0;
+  padding-right: 40px;
+}
+.hud-input-wrapper .toggle-password {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.4);
+  transition: 0.3s;
+}
+.hud-input-wrapper .toggle-password:hover,
+.hud-input-wrapper .toggle-password.active {
+  color: rgb(var(--jinx-pink-rgb));
+  text-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.8);
+  opacity: 1;
 }

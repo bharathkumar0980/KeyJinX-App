@@ -1,5 +1,5 @@
 // ==========================================
-// KeyJinX - Trapezoid Command Bar Logic
+// KeyJinX - Dual-Interface Navigation Logic
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -13,75 +13,89 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
   if (navMenu) {
-    // 1. CORE
-    let menuItems = `
-            <li><a href="index.html" class="${currentPage === "index.html" ? "active" : ""}" title="Home"><i class="fa-solid fa-house"></i></a></li>
-        `;
+    // ==========================================
+    // 1. DESKTOP MENU (Icons + Dropdown)
+    // ==========================================
+    let desktopItems = `
+      <li class="desktop-item"><a href="index.html" class="${currentPage === "index.html" ? "active" : ""}" title="Home"><i class="fa-solid fa-house"></i></a></li>
+    `;
 
-    // 2. SECURE OPS (Auth Only)
     if (token) {
-      menuItems += `
-                <li><a href="manager.html" class="${currentPage === "manager.html" ? "active" : ""}" title="Vault"><i class="fa-solid fa-vault"></i></a></li>
-            `;
+      desktopItems += `<li class="desktop-item"><a href="manager.html" class="${currentPage === "manager.html" ? "active" : ""}" title="Vault"><i class="fa-solid fa-vault"></i></a></li>`;
     }
-    // 3. CIPHER TOOLS (Dropdown)
-    menuItems += `
-            <li class="dropdown">
-                <a href="#" class="dropbtn" title="Cryptographic Tools"><i class="fa-solid fa-microchip"></i></a>
-                <div class="dropdown-content">
-                    <a href="text_encrypt.html"><i class="fa-solid fa-user-secret"></i> Text Transcoder</a>
-                    <a href="image_vault.html"><i class="fa-solid fa-file-image"></i> Image Cipher</a>
-                </div>
-            </li>
-        `;
 
-    // 4. INTEL & COMMS
-    menuItems += `
-            <li><a href="about.html" class="${currentPage === "about.html" ? "active" : ""}" title="System Intel"><i class="fa-solid fa-circle-info"></i></a></li>
-            <li><a href="contact.html" class="${currentPage === "contact.html" ? "active" : ""}" title="Secure Comms"><i class="fa-solid fa-envelope"></i></a></li>
-        `;
+    desktopItems += `
+      <li class="dropdown desktop-item">
+          <a href="#" class="dropbtn" title="Cryptographic Tools"><i class="fa-solid fa-microchip"></i></a>
+          <div class="dropdown-content">
+              <a href="text_encrypt.html"><i class="fa-solid fa-user-secret"></i> Text Transcoder</a>
+              <a href="image_vault.html"><i class="fa-solid fa-file-image"></i> Image Cipher</a>
+          </div>
+      </li>
+      <li class="desktop-item"><a href="about.html" class="${currentPage === "about.html" ? "active" : ""}" title="System Intel"><i class="fa-solid fa-circle-info"></i></a></li>
+      <li class="desktop-item"><a href="contact.html" class="${currentPage === "contact.html" ? "active" : ""}" title="Secure Comms"><i class="fa-solid fa-envelope"></i></a></li>
+    `;
 
-    // 5. ROOT ACCESS (Admin Only)
     if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        if (payload.role === "The Admin") {
-          menuItems += `<li><a href="admin.html" class="${currentPage === "admin.html" ? "active" : ""}" title="Mainframe Root" style="color: #FF00C8;"><i class="fa-solid fa-terminal"></i></a></li>`;
-        }
-      } catch (e) {
-        console.error("Access error", e);
-      }
-
-      // 6. IDENTITY & POWER (Trapezoid Block)
-      menuItems += `
-                <li class="nav-session-block">
-                    <a href="profile.html" class="op-info" title="Access Profile Settings">
-                        <span class="op-label">OP_ACTIVE</span>
-                        <span class="op-name">${identifier.split(" ")[0].split("@")[0].toUpperCase()}</span>
-                    </a>
-                    <div id="logoutBtn" class="logout-square" title="Terminate Session">
-                        <i class="fa-solid fa-power-off"></i>
-                    </div>
-                </li>
-            `;
+      desktopItems += `
+        <li class="nav-session-block desktop-item">
+            <a href="profile.html" class="op-info" title="Access Profile Settings">
+                <span class="op-label">OP_ACTIVE</span>
+                <span class="op-name">${identifier.split(" ")[0].split("@")[0].toUpperCase()}</span>
+            </a>
+            <div id="logoutBtn" class="logout-square" title="Terminate Session">
+                <i class="fa-solid fa-power-off"></i>
+            </div>
+        </li>
+      `;
     } else {
-      // Login for Public Users
-      menuItems += `
-                <li><a href="login.html" class="${currentPage === "login.html" ? "active" : ""}" title="Login" style="margin-right: 20px;"><i class="fa-solid fa-right-to-bracket"></i></a></li>
-            `;
+      desktopItems += `<li class="desktop-item"><a href="login.html" class="${currentPage === "login.html" ? "active" : ""}" title="Login" style="margin-right: 20px;"><i class="fa-solid fa-right-to-bracket"></i></a></li>`;
     }
 
-    navMenu.innerHTML = menuItems;
+    // ==========================================
+    // 2. MOBILE MENU (Pure Text Only)
+    // ==========================================
+    let mobileItems = `
+      <li class="mobile-item"><a href="index.html" class="${currentPage === "index.html" ? "active" : ""}">HOME</a></li>
+    `;
 
-    document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    if (token) {
+      mobileItems += `<li class="mobile-item"><a href="manager.html" class="${currentPage === "manager.html" ? "active" : ""}">VAULT</a></li>`;
+    }
+
+    mobileItems += `
+      <li class="mobile-item"><a href="text_encrypt.html" class="${currentPage === "text_encrypt.html" ? "active" : ""}">TEXT TRANSCODER</a></li>
+      <li class="mobile-item"><a href="image_vault.html" class="${currentPage === "image_vault.html" ? "active" : ""}">IMAGE CIPHER</a></li>
+      <li class="mobile-item"><a href="about.html" class="${currentPage === "about.html" ? "active" : ""}">ABOUT</a></li>
+      <li class="mobile-item"><a href="contact.html" class="${currentPage === "contact.html" ? "active" : ""}">CONTACT</a></li>
+    `;
+
+    if (token) {
+      mobileItems += `
+        <li class="mobile-item"><a href="profile.html" class="${currentPage === "profile.html" ? "active" : ""}">PROFILE</a></li>
+        <li class="mobile-item"><a href="#" id="mobileLogoutBtn" style="color: rgb(var(--danger-rgb));">DISCONNECT</a></li>
+      `;
+    } else {
+      mobileItems += `<li class="mobile-item"><a href="login.html" class="${currentPage === "login.html" ? "active" : ""}">LOGIN</a></li>`;
+    }
+
+    // Inject BOTH lists
+    navMenu.innerHTML = desktopItems + mobileItems;
+
+    // Logout Events
+    const doLogout = () => {
       localStorage.clear();
       sessionStorage.clear();
       window.location.href = "login.html";
-    });
+    };
+    document.getElementById("logoutBtn")?.addEventListener("click", doLogout);
+    document
+      .getElementById("mobileLogoutBtn")
+      ?.addEventListener("click", doLogout);
   }
 });
 
-// Clocks and Utilities...
+// Clocks and Utilities
 setInterval(() => {
   const now = new Date();
   const utcClock = document.getElementById("clock");
@@ -94,3 +108,26 @@ setInterval(() => {
 window.goBack = function () {
   window.history.back();
 };
+
+// ==========================================
+// MOBILE HAMBURGER MENU TOGGLE
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+  const hamburger = document.getElementById("hamburger");
+  const navMenu = document.getElementById("navMenu");
+
+  if (hamburger && navMenu) {
+    hamburger.addEventListener("click", () => {
+      hamburger.classList.toggle("active");
+      navMenu.classList.toggle("active");
+    });
+
+    const navLinks = navMenu.querySelectorAll(".mobile-item a");
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        hamburger.classList.remove("active");
+        navMenu.classList.remove("active");
+      });
+    });
+  }
+});

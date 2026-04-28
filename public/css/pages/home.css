@@ -1,0 +1,215 @@
+/* ============================================================
+   [PAGE] HOME / LANDING
+   ============================================================ */
+.hero-panel {
+  width: 100%;
+  max-width: 1150px;
+  margin: 40px auto;
+  padding: 60px 32px;
+  /* Restored the raw blueprint gradient stack */
+  background:
+    linear-gradient(rgba(var(--jinx-cyan-rgb), 0.045) 1px, transparent 1px) 0
+      0 / 20px 20px,
+    linear-gradient(
+        90deg,
+        rgba(var(--jinx-cyan-rgb), 0.045) 1px,
+        transparent 1px
+      )
+      0 0 / 20px 20px,
+    linear-gradient(rgba(var(--jinx-cyan-rgb), 0.09) 1px, transparent 1px) 0 0 /
+      100px 100px,
+    linear-gradient(
+        90deg,
+        rgba(var(--jinx-cyan-rgb), 0.09) 1px,
+        transparent 1px
+      )
+      0 0 / 100px 100px,
+    radial-gradient(
+      ellipse at 12% 82%,
+      rgba(var(--jinx-pink-rgb), 0.14) 0%,
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 88% 22%,
+      rgba(var(--jinx-purple-rgb), 0.12) 0%,
+      transparent 45%
+    ),
+    linear-gradient(165deg, #020b14 0%, #03060e 45%, #060312 100%);
+  border: 1px dashed rgba(var(--jinx-cyan-rgb), 0.45);
+  clip-path: polygon(
+    0 15px,
+    15px 0,
+    60% 0,
+    62% 10px,
+    90% 10px,
+    100% 40px,
+    100% calc(100% - 30px),
+    calc(100% - 30px) 100%,
+    40% 100%,
+    38% calc(100% - 10px),
+    30px calc(100% - 10px),
+    0 calc(100% - 40px)
+  );
+  animation: schematic-breathe 5s ease-in-out infinite;
+  transition:
+    transform 0.35s cubic-bezier(0.19, 1, 0.22, 1),
+    border-color 0.3s ease,
+    background 0.3s ease;
+  position: relative;
+  z-index: 5;
+}
+
+.hero-panel::before {
+  content: "";
+  position: absolute;
+  top: 46px;
+  left: 40px;
+  right: 55px;
+  height: 1px;
+  background-color: rgba(var(--jinx-cyan-rgb), 0.18);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(var(--jinx-cyan-rgb), 0.15) 42%,
+    rgba(var(--jinx-cyan-rgb), 0.95) 50%,
+    rgba(var(--jinx-cyan-rgb), 0.15) 58%,
+    transparent 70%,
+    transparent 100%
+  );
+  background-size: 160px 100%;
+  background-repeat: no-repeat;
+  animation:
+    signal-travel 2.8s linear infinite,
+    node-ping 2.8s ease-in-out infinite;
+}
+.hero-panel::after {
+  content: "UNIT: JNX-06  //  CLASS: VOLATILE  //  YIELD: \221E";
+  position: absolute;
+  bottom: 22px;
+  left: 42px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: rgba(var(--jinx-cyan-rgb), 0.55);
+  text-shadow: 0 0 12px rgba(var(--jinx-cyan-rgb), 0.3);
+  border-left: 2px solid rgba(var(--jinx-pink-rgb), 0.6);
+  padding-left: 10px;
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.hero-panel:hover {
+  animation: none;
+  border: 1px solid rgba(var(--jinx-cyan-rgb), 0.7);
+  transform: translateY(-4px);
+  box-shadow:
+    -8px 8px 0px rgba(var(--jinx-purple-rgb), 0.3),
+    0 0 35px rgba(var(--jinx-cyan-rgb), 0.22),
+    0 0 80px rgba(var(--jinx-pink-rgb), 0.1),
+    0 30px 110px rgba(0, 0, 0, 0.95),
+    inset 0 0 55px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(var(--jinx-cyan-rgb), 0.4);
+}
+.hero-panel:hover::after {
+  color: rgb(var(--jinx-cyan-rgb));
+  text-shadow: 0 0 18px rgba(var(--jinx-cyan-rgb), 0.6);
+  border-color: rgb(var(--jinx-pink-rgb));
+}
+
+.hero-content {
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 10px;
+}
+.hero-heading {
+  width: 100%;
+  text-align: center;
+  color: rgb(var(--jinx-cyan-rgb));
+  font-weight: 700;
+  transform: rotate(-1deg);
+  text-shadow:
+    0 0 20px rgba(var(--jinx-cyan-rgb), 0.6),
+    0 0 40px rgba(var(--jinx-cyan-rgb), 0.25);
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+  position: relative;
+}
+.hero-heading .hero-brand {
+  font-size: clamp(3.6rem, 6vw, 5rem);
+  margin-bottom: 4px;
+}
+.hero-heading .hero-tagline {
+  font-size: clamp(1.7rem, 3.6vw, 2.35rem);
+  margin-top: 4px;
+}
+.hero-subtitle {
+  margin: 10px 0 16px;
+  font-size: 1.38rem;
+  color: rgb(var(--jinx-pink-rgb)) !important;
+  font-weight: 500;
+}
+.hero-description {
+  font-size: 1.18rem;
+  line-height: 1.65;
+  margin: 0 auto 20px;
+  max-width: 820px;
+  opacity: 0.95;
+}
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+/* Security Disclaimer Extracted from About.html */
+.disclaimer {
+  border-left: 4px solid rgb(var(--jinx-pink-rgb));
+  background-color: rgba(var(--jinx-pink-rgb), 0.08);
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 30px;
+}
+.disclaimer h3 {
+  color: rgb(var(--jinx-pink-rgb));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.disclaimer p {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .hero-panel {
+    padding: 28px 22px;
+  }
+  .hero-description {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .hero-content {
+    padding: 30px 20px;
+  }
+  .hero-buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .hero-buttons .btn {
+    width: 100%;
+  }
+}

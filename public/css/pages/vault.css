@@ -1,5 +1,5 @@
 /* ============================================================
-   TABLES (VAULT UI - JINX THEME)
+   [PAGE] TABLES (VAULT UI)
    ============================================================ */
 .table-container {
   background: rgba(17, 17, 17, 0.6);
@@ -13,7 +13,6 @@
   width: 100%;
   padding: 5px;
 }
-
 .table-container table {
   width: 100%;
   border-collapse: collapse;
@@ -31,7 +30,6 @@ th {
   border-bottom: 1px solid rgba(var(--jinx-cyan-rgb), 0.3);
   text-align: center;
 }
-
 td {
   padding: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -39,66 +37,55 @@ td {
   text-align: center;
   vertical-align: middle;
   transition: all 0.3s ease;
-  font-family: "Consolas", "Courier New", monospace;
+  font-family: var(--font-mono);
   letter-spacing: 1px;
 }
-
 tr:hover td {
   background: rgba(var(--jinx-purple-rgb), 0.15);
   text-shadow: 0 0 8px rgba(var(--jinx-cyan-rgb), 0.6);
 }
 
-/* ============================================================
-   TABLE ACTION BUTTONS
-   ============================================================ */
-/* This targets every button inside the vault table */
+/* Table Action Buttons */
 table button {
   background: none !important;
   border: none !important;
   padding: 8px !important;
   cursor: pointer;
   margin: 0 4px;
-  /* Matches global transition feel from components.css */
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s ease;
-  box-shadow: none !important; 
+  transition:
+    transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    filter 0.2s ease;
+  box-shadow: none !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
-
 table button i {
   color: rgb(var(--text-main-rgb));
   font-size: 1.15rem;
   opacity: 0.8;
-  transition: color 0.2s ease, text-shadow 0.2s ease;
+  transition:
+    color 0.2s ease,
+    text-shadow 0.2s ease;
 }
-
-/* Unified Hover State: Lift and Glow */
 table button:hover {
-  transform: scale(1.25) translateY(-2px); 
+  transform: scale(1.25) translateY(-2px);
   filter: drop-shadow(0 0 8px rgba(var(--jinx-cyan-rgb), 0.4));
 }
-
 table button:hover i {
   opacity: 1;
-  color: rgb(var(--jinx-pink-rgb)); /* Hextech Cyan highlight */
+  color: rgb(var(--jinx-pink-rgb));
   text-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.8);
 }
-
-/* Destructive Action Hover: Pink Glow */
 table button.delete-btn:hover i {
-  color: rgb(var(--jinx-pink-rgb)); 
+  color: rgb(var(--jinx-pink-rgb));
   text-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.8);
 }
-
-/* Active "Click" Animation */
 table button:active {
   transform: scale(0.95);
 }
 
-/* ============================================================
-   PASSWORD MASKING UI
-   ============================================================ */
+/* Password Masking */
 .password-cell {
   display: flex;
   position: relative;
@@ -107,29 +94,24 @@ table button:active {
   justify-content: center;
   gap: 12px;
   white-space: nowrap;
-  font-family: "Consolas", monospace;
+  font-family: var(--font-mono);
 }
-
 .vault-text {
-  font-family: "Consolas", monospace;
+  font-family: var(--font-mono);
   letter-spacing: 1px;
   color: rgb(var(--text-main-rgb));
   transition: all 0.3s ease;
 }
-
-/* Mask effect using text-security */
 .vault-text.masked {
-  -webkit-text-security: disc; 
-  text-security: disc;         
+  -webkit-text-security: disc;
+  text-security: disc;
   opacity: 0.7;
 }
-
 .vault-text.unmasked {
   -webkit-text-security: none;
   text-security: none;
   opacity: 1;
 }
-
 .vault-actions {
   display: flex;
   gap: 5px;
@@ -137,25 +119,32 @@ table button:active {
 
 /* System Status Pulse */
 .pulse {
-    color: rgb(var(--jinx-cyan-rgb));
-    animation: neonPulse 2s infinite;
+  color: rgb(var(--jinx-cyan-rgb));
+  animation: neonPulse 2s infinite;
 }
-
 @keyframes neonPulse {
-    0% { text-shadow: 0 0 5px rgba(var(--jinx-cyan-rgb), 0.2); opacity: 0.7; }
-    50% { text-shadow: 0 0 20px rgba(var(--jinx-cyan-rgb), 0.8); opacity: 1; }
-    100% { text-shadow: 0 0 5px rgba(var(--jinx-cyan-rgb), 0.2); opacity: 0.7; }
-}
-
-/* Specific styling for the Admin Header */
-.admin-identity strong {
-    color: rgb(var(--jinx-pink-rgb));
-    text-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.5);
+  0% {
+    text-shadow: 0 0 5px rgba(var(--jinx-cyan-rgb), 0.2);
+    opacity: 0.7;
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(var(--jinx-cyan-rgb), 0.8);
+    opacity: 1;
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(var(--jinx-cyan-rgb), 0.2);
+    opacity: 0.7;
+  }
 }
 
 @media (max-width: 600px) {
-  th, td {
+  th,
+  td {
     padding: 12px 10px;
     font-size: 0.9rem;
   }
+}
+.admin-identity strong {
+  color: rgb(var(--jinx-pink-rgb));
+  text-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.5);
 }

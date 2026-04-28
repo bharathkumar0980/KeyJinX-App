@@ -1,0 +1,19 @@
+/* =========================================
+   KEYJINX STYLESHEET MANIFEST
+   ========================================= */
+
+/* 1. Core Architecture */
+@import url("1-theme.css");
+@import url("2-base.css");
+@import url("3-layout.css");
+
+/* 2. Reusable Elements */
+@import url("4-components.css");
+@import url("5-effects.css");
+
+/* 3. Page Specific Views */
+@import url("pages/home.css");
+@import url("pages/auth.css");
+@import url("pages/vault.css");
+@import url("pages/admin.css");
+@import url("pages/profile.css");

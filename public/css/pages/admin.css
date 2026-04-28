@@ -1,16 +1,6 @@
 /* ============================================================
-   MAINFRAME DASHBOARD UI (Extends base.css)
+   [PAGE] MAINFRAME DASHBOARD UI
    ============================================================ */
-:root {
-  --font-mono: "Consolas", "Courier New", monospace;
-  --color-border-primary: rgba(var(--jinx-cyan-rgb), 0.4);
-  --color-border-secondary: rgba(var(--jinx-cyan-rgb), 0.15);
-  --color-border-tertiary: rgba(255, 255, 255, 0.08);
-  --color-text-secondary: #a1a1aa;
-  --color-text-tertiary: #6b7280;
-}
-
-/* Container limits the hacker font strictly to the dashboard area */
 .dash {
   padding: 20px;
   display: flex;
@@ -26,7 +16,7 @@
   background: rgba(var(--bg-panel-rgb), 0.8);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--color-border-primary);
+  border: 1px solid rgba(var(--jinx-cyan-rgb), 0.4);
   border-radius: 6px;
   padding: 14px 20px;
   display: flex;
@@ -99,7 +89,7 @@
   background: rgba(var(--bg-panel-rgb), 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--color-border-secondary);
+  border: 1px solid rgba(var(--jinx-cyan-rgb), 0.15);
   border-radius: 6px;
   padding: 16px;
   transition:
@@ -163,7 +153,7 @@
 
 .log-box {
   background: rgba(0, 0, 0, 0.6);
-  border: 1px solid var(--color-border-secondary);
+  border: 1px solid rgba(var(--jinx-cyan-rgb), 0.15);
   border-radius: 4px;
   height: 220px;
   overflow-y: auto;
@@ -205,11 +195,11 @@
   font-weight: bold;
   font-size: 10px;
   letter-spacing: 0.07em;
-  border-bottom: 1px solid var(--color-border-secondary);
+  border-bottom: 1px solid rgba(var(--jinx-cyan-rgb), 0.15);
 }
 .inbox-table td {
   padding: 10px 6px;
-  border-bottom: 1px solid var(--color-border-tertiary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   vertical-align: middle;
   color: var(--color-text-secondary);
 }
@@ -223,16 +213,17 @@
   font-size: 10px;
   padding: 4px 10px;
   border-radius: 0;
-  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-}
-.btn-sm:hover {
-  /* uses shared hollow->fill hover from components.css */
+  clip-path: polygon(
+    10px 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%,
+    0 10px
+  );
 }
 .btn-sm.danger {
   --btn-rgb: var(--jinx-purple-rgb);
-}
-.btn-sm.danger:hover {
-  /* uses shared hollow->fill hover from components.css */
 }
 
 .section-title {
@@ -241,7 +232,7 @@
   color: var(--color-text-tertiary);
   text-transform: uppercase;
   margin-bottom: 10px;
-  border-bottom: 1px dashed var(--color-border-tertiary);
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
   padding-bottom: 4px;
 }
 .chart-wrap {
@@ -310,11 +301,21 @@
   text-shadow: 0 0 10px rgb(var(--jinx-pink-rgb));
 }
 
-/* --- Mobile Responsiveness for Mainframe --- */
 @media (max-width: 1024px) {
-  .grid-5, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-5,
+  .grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 @media (max-width: 768px) {
-  .grid-5, .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
-  .header { flex-direction: column; align-items: flex-start; }
+  .grid-5,
+  .grid-4,
+  .grid-3,
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

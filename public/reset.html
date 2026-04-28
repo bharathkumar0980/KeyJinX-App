@@ -1,89 +1,179 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KeyJinX | Emergency Override</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body class="auth-page-reset">
-    
-    <div class="container" style="max-width: 860px; margin-top: 50px;">
-        <header class="page-header">
-            <h1 id="pageTitle">
-                <i class="fa-solid fa-triangle-exclamation"></i> OVERRIDE
-            </h1>
-            <p class="subtitle" style="text-align: center; color: var(--color-text-secondary); letter-spacing: 2px;">PROTOCOL: VAULT RECALIBRATION</p>
-        </header>
+    <link rel="stylesheet" href="css/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body class="auth-page-reset">
+    <div class="container" style="max-width: 860px; margin-top: 50px">
+      <header class="page-header">
+        <h1 id="pageTitle">
+          <i class="fa-solid fa-triangle-exclamation"></i> OVERRIDE
+        </h1>
+        <p
+          class="subtitle"
+          style="
+            text-align: center;
+            color: var(--color-text-secondary);
+            letter-spacing: 2px;
+          "
+        >
+          PROTOCOL: VAULT RECALIBRATION
+        </p>
+      </header>
 
-        <main class="auth-container" style="margin-top: 30px;">
-            <div id="resetSection" class="auth-card" style="width: 100%;">
-                
-                <div class="warning-box" style="background: rgba(255, 76, 76, 0.1); border-left: 4px solid #ff4c4c; padding: 15px; margin-bottom: 25px; display: flex; gap: 12px; border-radius: 4px;">
-                    <i class="fa-solid fa-radiation" style="color: #ff4c4c; font-size: 1.2rem;"></i>
-                    <p style="font-size: 0.85rem; color: #ffb3b3; margin: 0; line-height: 1.5;">
-                        <strong>CRITICAL WARNING:</strong> Initiating this protocol will permanently vaporize all existing vault data to prevent unauthorized access.
-                    </p>
-                </div>
+      <main class="auth-container" style="margin-top: 30px">
+        <div id="resetSection" class="auth-card" style="width: 100%">
+          <div
+            class="warning-box"
+            style="
+              background: rgba(255, 76, 76, 0.1);
+              border-left: 4px solid #ff4c4c;
+              padding: 15px;
+              margin-bottom: 25px;
+              display: flex;
+              gap: 12px;
+              border-radius: 4px;
+            "
+          >
+            <i
+              class="fa-solid fa-radiation"
+              style="color: #ff4c4c; font-size: 1.2rem"
+            ></i>
+            <p
+              style="
+                font-size: 0.85rem;
+                color: #ffb3b3;
+                margin: 0;
+                line-height: 1.5;
+              "
+            >
+              <strong>CRITICAL WARNING:</strong> Initiating this protocol will
+              permanently vaporize all existing vault data to prevent
+              unauthorized access.
+            </p>
+          </div>
 
-                <form id="resetForm" class="contact-form">
-                    
-                    <div class="form-group icon-input-group">
-                        <label for="resetEmail">Operative Email</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-envelope input-icon" style="color: #ff4c4c;"></i>
-                            <input type="email" id="resetEmail" placeholder="jinx@gmail.com" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group icon-input-group">
-                        <label for="recoveryKey">Emergency Recovery Key</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-key input-icon" style="color: #ff4c4c;"></i>
-                            <input type="text" id="recoveryKey" placeholder="KJX-XXXX-XXXX-XXXX" required style="font-family: monospace; letter-spacing: 1px;">
-                        </div>
-                    </div>
-
-                    <div class="form-group icon-input-group">
-                        <label for="newPassword">New Master Password</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-shield-halved input-icon" style="color: #ff4c4c;"></i>
-                            <input type="password" id="newPassword" placeholder="••••••••" required minlength="8" oninput="checkStrength(this.value)">
-                            <i class="fa-solid fa-eye toggle-password" onclick="toggleVisibility('newPassword', this)"></i>
-                        </div>
-                        <div class="strength-meter-container">
-                            <div id="strength-bar" class="strength-bar"></div>
-                        </div>
-                        <small id="strength-text" style="color: #dff8ff; opacity: 0.7; font-size: 0.8rem">Awaiting input...</small>
-                    </div>
-
-                    <div class="form-group icon-input-group">
-                        <label for="confirmNewPassword">Confirm Master Password</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-shield-check input-icon" style="color: #ff4c4c;"></i>
-                            <input type="password" id="confirmNewPassword" placeholder="••••••••" required minlength="8">
-                            <i class="fa-solid fa-eye toggle-password" onclick="toggleVisibility('confirmNewPassword', this)"></i>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary reset-btn" style="width: 100%; margin-top: 15px;">
-                        RECALIBRATE VAULT <i class="fa-solid fa-skull-crossbones"></i>
-                    </button>
-                </form>
-
-                <div class="auth-footer" style="text-align: center; margin-top: 20px;">
-                    <a href="login.html" style="color: var(--color-text-secondary); text-decoration: none; font-size: 0.9rem; transition: 0.3s;">
-                        <i class="fa-solid fa-arrow-left"></i> Abort & Return to Login
-                    </a>
-                </div>
+          <form id="resetForm" class="contact-form">
+            <div class="form-group icon-input-group">
+              <label for="resetEmail">Operative Email</label>
+              <div class="input-wrapper">
+                <i
+                  class="fa-solid fa-envelope input-icon"
+                  style="color: #ff4c4c"
+                ></i>
+                <input
+                  type="email"
+                  id="resetEmail"
+                  placeholder="jinx@gmail.com"
+                  required
+                />
+              </div>
             </div>
-        </main>
+
+            <div class="form-group icon-input-group">
+              <label for="recoveryKey">Emergency Recovery Key</label>
+              <div class="input-wrapper">
+                <i
+                  class="fa-solid fa-key input-icon"
+                  style="color: #ff4c4c"
+                ></i>
+                <input
+                  type="text"
+                  id="recoveryKey"
+                  placeholder="KJX-XXXX-XXXX-XXXX"
+                  required
+                  style="font-family: monospace; letter-spacing: 1px"
+                />
+              </div>
+            </div>
+
+            <div class="form-group icon-input-group">
+              <label for="newPassword">New Master Password</label>
+              <div class="input-wrapper">
+                <i
+                  class="fa-solid fa-shield-halved input-icon"
+                  style="color: #ff4c4c"
+                ></i>
+                <input
+                  type="password"
+                  id="newPassword"
+                  placeholder="••••••••"
+                  required
+                  minlength="8"
+                  oninput="checkStrength(this.value)"
+                />
+                <i
+                  class="fa-solid fa-eye toggle-password"
+                  onclick="toggleVisibility('newPassword', this)"
+                ></i>
+              </div>
+              <div class="strength-meter-container">
+                <div id="strength-bar" class="strength-bar"></div>
+              </div>
+              <small
+                id="strength-text"
+                style="color: #dff8ff; opacity: 0.7; font-size: 0.8rem"
+                >Awaiting input...</small
+              >
+            </div>
+
+            <div class="form-group icon-input-group">
+              <label for="confirmNewPassword">Confirm Master Password</label>
+              <div class="input-wrapper">
+                <i
+                  class="fa-solid fa-shield-check input-icon"
+                  style="color: #ff4c4c"
+                ></i>
+                <input
+                  type="password"
+                  id="confirmNewPassword"
+                  placeholder="••••••••"
+                  required
+                  minlength="8"
+                />
+                <i
+                  class="fa-solid fa-eye toggle-password"
+                  onclick="toggleVisibility('confirmNewPassword', this)"
+                ></i>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary reset-btn"
+              style="width: 100%; margin-top: 15px"
+            >
+              RECALIBRATE VAULT <i class="fa-solid fa-skull-crossbones"></i>
+            </button>
+          </form>
+
+          <div class="auth-footer" style="text-align: center; margin-top: 20px">
+            <a
+              href="login.html"
+              style="
+                color: var(--color-text-secondary);
+                text-decoration: none;
+                font-size: 0.9rem;
+                transition: 0.3s;
+              "
+            >
+              <i class="fa-solid fa-arrow-left"></i> Abort & Return to Login
+            </a>
+          </div>
+        </div>
+      </main>
     </div>
 
     <div id="toast"></div>
     <script src="js/auth.js"></script>
-    
+
     <script>
       function toggleVisibility(inputId, iconElement) {
         const input = document.getElementById(inputId);
@@ -91,12 +181,12 @@
           input.type = "text";
           iconElement.classList.remove("fa-eye");
           iconElement.classList.add("fa-eye-slash");
-          iconElement.style.color = "#ff4c4c"; 
+          iconElement.style.color = "#ff4c4c";
         } else {
           input.type = "password";
           iconElement.classList.remove("fa-eye-slash");
           iconElement.classList.add("fa-eye");
-          iconElement.style.color = "rgba(223, 248, 255, 0.5)"; 
+          iconElement.style.color = "rgba(223, 248, 255, 0.5)";
         }
       }
 
@@ -105,29 +195,39 @@
         const text = document.getElementById("strength-text");
 
         if (password.length === 0) {
-          bar.style.width = "0%"; bar.style.backgroundColor = "transparent";
-          text.innerText = "Awaiting input..."; return;
+          bar.style.width = "0%";
+          bar.style.backgroundColor = "transparent";
+          text.innerText = "Awaiting input...";
+          return;
         }
 
         let strength = 0;
-        if (password.length > 7) strength += 1; 
-        if (password.match(/[a-z]+/)) strength += 1; 
-        if (password.match(/[A-Z]+/)) strength += 1; 
-        if (password.match(/[0-9]+/)) strength += 1; 
-        if (password.match(/[$@#&!]+/)) strength += 1; 
+        if (password.length > 7) strength += 1;
+        if (password.match(/[a-z]+/)) strength += 1;
+        if (password.match(/[A-Z]+/)) strength += 1;
+        if (password.match(/[0-9]+/)) strength += 1;
+        if (password.match(/[$@#&!]+/)) strength += 1;
 
         switch (strength) {
-          case 1: case 2:
-            bar.style.width = "33%"; bar.style.backgroundColor = "#ff4c4c"; 
-            text.innerText = "Weak - Add numbers and symbols"; break;
-          case 3: case 4:
-            bar.style.width = "66%"; bar.style.backgroundColor = "#ffaa00"; 
-            text.innerText = "Moderate - Getting closer"; break;
+          case 1:
+          case 2:
+            bar.style.width = "33%";
+            bar.style.backgroundColor = "#ff4c4c";
+            text.innerText = "Weak - Add numbers and symbols";
+            break;
+          case 3:
+          case 4:
+            bar.style.width = "66%";
+            bar.style.backgroundColor = "#ffaa00";
+            text.innerText = "Moderate - Getting closer";
+            break;
           case 5:
-            bar.style.width = "100%"; bar.style.backgroundColor = "#ff00c8"; 
-            text.innerText = "Strong - Vault Ready"; break;
+            bar.style.width = "100%";
+            bar.style.backgroundColor = "#ff00c8";
+            text.innerText = "Strong - Vault Ready";
+            break;
         }
       }
     </script>
-</body>
+  </body>
 </html>
