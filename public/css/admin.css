@@ -222,24 +222,17 @@
   font-family: var(--font-mono);
   font-size: 10px;
   padding: 4px 10px;
-  border: 1px solid rgb(var(--jinx-cyan-rgb));
-  border-radius: 3px;
-  cursor: pointer;
-  background: transparent;
-  color: rgb(var(--jinx-cyan-rgb));
-  transition: 0.2s;
+  border-radius: 0;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 .btn-sm:hover {
-  background: rgba(var(--jinx-cyan-rgb), 0.2);
-  box-shadow: 0 0 8px rgb(var(--jinx-cyan-rgb));
+  /* uses shared hollow->fill hover from components.css */
 }
 .btn-sm.danger {
-  border-color: rgb(var(--jinx-pink-rgb));
-  color: rgb(var(--jinx-pink-rgb));
+  --btn-rgb: var(--jinx-purple-rgb);
 }
 .btn-sm.danger:hover {
-  background: rgba(var(--jinx-pink-rgb), 0.2);
-  box-shadow: 0 0 8px rgb(var(--jinx-pink-rgb));
+  /* uses shared hollow->fill hover from components.css */
 }
 
 .section-title {

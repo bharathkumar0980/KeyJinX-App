@@ -4,14 +4,17 @@
 .auth-wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 40px 0;
+    align-items: flex-start;
+    width: 100%;
+    min-height: auto;
+    padding: 10px 0 30px;
 }
 
 /* 🛠️ THE NEW TERMINAL AUTH CARD */
 .auth-card {
     width: 100%;
     max-width: 460px;
+    margin: 0 auto;
     background-color: rgba(6, 8, 12, 0.9);
     
     /* Subtle Tactical Grid */
@@ -28,6 +31,31 @@
     
     /* 🛠️ Aggressive Clipped Corners */
     clip-path: polygon(30px 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%, 0 30px);
+}
+
+/* Larger auth cards for login/register pages */
+#loginSection.auth-card,
+#registerSection.auth-card {
+    max-width: 620px;
+    padding: 52px 48px;
+}
+
+/* Allow recovery panel to use available horizontal space */
+#resetSection.auth-card {
+    max-width: none;
+}
+
+@media (max-width: 768px) {
+    .auth-wrapper {
+        min-height: auto;
+        padding: 8px 0 20px;
+    }
+
+    #loginSection.auth-card,
+    #registerSection.auth-card {
+        max-width: 100%;
+        padding: 40px 24px;
+    }
 }
 
 /* Decorative Mechanical Notches */
@@ -298,11 +326,7 @@
 .reset-btn {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(45deg, #8b0000, #ff4c4c);
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-weight: bold;
+    border-radius: 0;
     cursor: pointer;
     text-transform: uppercase;
     transition: 0.3s;
@@ -310,5 +334,4 @@
 
 .reset-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 76, 76, 0.4);
 }

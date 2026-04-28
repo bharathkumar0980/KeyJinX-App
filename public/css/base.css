@@ -47,31 +47,42 @@ body {
 }
 
 /* ============================================================
-   GRAFFITI HEADING STYLES
+   ARCANE HEADING SYSTEM
    ============================================================ */
-h1 {
+.page-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1:not(.hero-heading) {
     width: 100%;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    line-height: 1.1;
+    font-family: var(--font-mono, 'Consolas', monospace);
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    font-weight: 800;
     color: rgb(var(--jinx-cyan-rgb));
-    font-size: 2.8rem;
-    font-weight: 700;
-    transform: rotate(-1deg);
-    text-shadow: 0 0 20px rgba(var(--jinx-cyan-rgb), 0.6), 0 0 40px rgba(var(--jinx-cyan-rgb), 0.25);
     margin-bottom: 30px;
-    letter-spacing: 1px;
     position: relative;
+    text-shadow:
+        0 0 6px rgba(var(--jinx-cyan-rgb), 0.65),
+        0 0 22px rgba(var(--jinx-cyan-rgb), 0.35),
+        2px 2px 0 rgba(var(--jinx-pink-rgb), 0.35);
 }
-h1::after {
+
+h1:not(.hero-heading)::after {
     content: "";
-    width: 140px;
-    height: 4px;
-    background: linear-gradient(90deg, rgb(var(--jinx-pink-rgb)), rgb(var(--jinx-cyan-rgb)));
+    width: min(220px, 65%);
+    height: 3px;
+    background:
+        linear-gradient(90deg, transparent, rgba(var(--jinx-pink-rgb), 1) 20%, rgba(var(--jinx-cyan-rgb), 1) 80%, transparent);
     position: absolute;
     left: 50%;
-    bottom: -8px;
-    transform: translateX(-50%) rotate(-3deg);
-    border-radius: 2px;
-    opacity: 0.9;
+    bottom: -10px;
+    transform: translateX(-50%);
+    box-shadow: 0 0 12px rgba(var(--jinx-cyan-rgb), 0.5);
 }
 
 h2 {
@@ -122,7 +133,6 @@ h3::after {
 }
 
 @media (max-width: 768px) {
-    h1 { font-size: 2.4rem; }
     h2 { font-size: 1.55rem; }
     h3 { font-size: 1.2rem; }
 }

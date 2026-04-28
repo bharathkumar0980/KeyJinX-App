@@ -3,6 +3,23 @@
  * Client-Side Zero-Knowledge Protocol
  */
 
+function toggleVisibility(inputId, iconElement) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    if (input.type === "password") {
+        input.type = "text";
+        iconElement.classList.remove("fa-eye");
+        iconElement.classList.add("fa-eye-slash");
+        iconElement.style.color = "#ff00c8";
+    } else {
+        input.type = "password";
+        iconElement.classList.remove("fa-eye-slash");
+        iconElement.classList.add("fa-eye");
+        iconElement.style.color = "rgba(223, 248, 255, 0.5)";
+    }
+}
+
 async function processImage(mode) {
     const fileInput = document.getElementById('imageInput');
     const key = document.getElementById('cipherKey').value;
