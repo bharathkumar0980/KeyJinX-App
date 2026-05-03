@@ -17,3 +17,229 @@
 @import url("pages/vault.css");
 @import url("pages/admin.css");
 @import url("pages/profile.css");
+
+/* ============================================================
+   [6] UNIVERSAL MOBILE RESCUE PATCH (THE FINAL POLISH)
+   ============================================================ */
+
+@media (max-width: 768px) {
+  /* 1. EXACT GEOMETRY PRESERVATION */
+  .container,
+  .hero-panel {
+    clip-path: polygon(
+      0 15px,
+      15px 0,
+      60% 0,
+      62% 10px,
+      90% 10px,
+      100% 40px,
+      100% calc(100% - 30px),
+      calc(100% - 30px) 100%,
+      40% 100%,
+      38% calc(100% - 10px),
+      30px calc(100% - 10px),
+      0 calc(100% - 40px)
+    ) !important;
+    padding: 50px 15px 50px !important;
+    margin: 15px auto !important;
+  }
+
+  .auth-card,
+  .password-form,
+  .contact-form,
+  .dossier-wrapper {
+    clip-path: polygon(
+      0 8px,
+      8px 0,
+      60% 0,
+      62% 5px,
+      90% 5px,
+      100% 20px,
+      100% calc(100% - 15px),
+      calc(100% - 15px) 100%,
+      40% 100%,
+      38% calc(100% - 5px),
+      15px calc(100% - 5px),
+      0 calc(100% - 20px)
+    ) !important;
+    padding: 30px 15px 30px !important;
+  }
+
+  /* 2. TYPOGRAPHY DIAL-DOWN */
+  .hero-heading .hero-brand {
+    font-size: 2.3rem !important;
+  }
+  .hero-heading .hero-tagline {
+    font-size: 1.15rem !important;
+    margin-top: 0 !important;
+  }
+  h1:not(.hero-heading) {
+    font-size: 1.35rem !important;
+    letter-spacing: 1px !important;
+    margin-bottom: 20px !important;
+  }
+  h2 {
+    font-size: 1.2rem !important;
+    margin-top: 20px !important;
+    margin-bottom: 15px !important;
+  }
+  h3 {
+    font-size: 1.05rem !important;
+  }
+  p,
+  .hero-description {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    opacity: 0.85 !important;
+  }
+
+  /* 3. NATIVE TOUCH TARGETS & FORM SPACING */
+  .form-group {
+    margin-bottom: 22px !important;
+  } /* Increased breathing room between inputs */
+  .form-group label {
+    font-size: 0.75rem !important;
+    margin-bottom: 8px !important;
+    letter-spacing: 1px !important;
+  }
+
+  .auth-card .input-wrapper input,
+  .hud-input,
+  .form-group input,
+  .form-group textarea {
+    padding: 14px 15px 14px 40px !important;
+    font-size: 1rem !important;
+    min-height: 48px !important;
+  }
+  .input-icon,
+  .toggle-password {
+    font-size: 1rem !important;
+  }
+
+  button,
+  .btn,
+  .btn-primary,
+  .btn-secondary {
+    padding: 14px 20px !important;
+    font-size: 0.9rem !important;
+    min-height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    clip-path: polygon(
+      8px 0,
+      100% 0,
+      100% calc(100% - 8px),
+      calc(100% - 8px) 100%,
+      0 100%,
+      0 8px
+    ) !important;
+  }
+  .hero-buttons {
+    flex-direction: column !important;
+    gap: 15px !important;
+    margin-top: 35px !important;
+  }
+  .hero-buttons .btn,
+  .hero-buttons .btn-primary {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* 4. VAULT TABLE REFINEMENT */
+  .table-container {
+    padding: 0 !important;
+    border-radius: 8px !important;
+    clip-path: none !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    border: 1px solid rgba(var(--jinx-cyan-rgb), 0.3) !important;
+    margin-top: 20px !important;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5) !important; /* Adds depth */
+  }
+  table {
+    min-width: 500px !important;
+    width: 100% !important;
+  } /* Reduced from 600px so it requires less scrolling */
+  th {
+    padding: 16px 12px !important;
+    font-size: 0.75rem !important;
+    background: rgba(
+      var(--jinx-cyan-rgb),
+      0.1
+    ) !important; /* Highlights headers */
+    border-bottom: 2px solid rgba(var(--jinx-cyan-rgb), 0.3) !important;
+  }
+  td {
+    padding: 15px 12px !important;
+    font-size: 0.85rem !important;
+    white-space: nowrap !important;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05) !important; /* Cleaner row separation */
+  }
+  table button {
+    padding: 10px !important;
+    margin: 0 4px !important;
+  }
+  table button i {
+    font-size: 1.1rem !important;
+  }
+
+  /* 5. TEXT & IMAGE CIPHER REFINEMENT */
+  #rawText,
+  #outputText {
+    min-height: 180px !important; /* Gives more vertical space for typing on mobile */
+    word-break: break-all !important;
+  }
+  /* Force the output area to space itself out cleanly */
+  #resultArea {
+    margin-top: 40px !important;
+  }
+
+  /* 6. PROFILE PAGE REFINEMENT */
+  .dossier-header {
+    flex-direction: column !important; /* Stacks the avatar above the name */
+    text-align: center !important;
+    gap: 15px !important;
+    padding-bottom: 25px !important;
+  }
+  .avatar-ring {
+    margin: 0 auto !important;
+    width: 80px !important;
+    height: 80px !important;
+    font-size: 35px !important;
+  }
+  .dossier-meta h2 {
+    font-size: 1.5rem !important;
+    margin-bottom: 5px !important;
+  }
+  .data-module {
+    padding: 20px 15px !important;
+    margin-bottom: 20px !important;
+  }
+  .m-value {
+    font-size: 0.95rem !important;
+    word-break: break-all !important;
+  } /* Prevents long emails from breaking the box */
+
+  /* 7. DISABLE HOVER JITTERS */
+  .container:hover,
+  .hero-panel:hover,
+  .feature-card:hover,
+  .info-card:hover {
+    transform: none !important;
+  }
+  .dash {
+    padding: 10px !important;
+    gap: 15px !important;
+  }
+  .feature-grid,
+  .info-grid {
+    gap: 20px !important;
+    margin-top: 25px !important;
+  }
+  .feature-card,
+  .info-card {
+    padding: 25px 20px !important;
+  }
+}
