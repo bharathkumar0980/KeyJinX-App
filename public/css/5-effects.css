@@ -1,8 +1,13 @@
 /* ============================================================
-   [5] SCI-FI & HEXTECH EFFECTS SYSTEM
+   5-effects.css | SCI-FI & HEXTECH EFFECTS SYSTEM
+   Contains reusable visual utilities and the full keyframe
+   animation library powering the blueprint, glitch, and
+   signal-travel effects used across the application.
    ============================================================ */
 
-/* Glassmorphism Utility */
+/* Glassmorphism Utility
+   backdrop-filter: blur creates the frosted-glass depth effect.
+   Requires a semi-transparent background to be visible. */
 .glass-panel {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
@@ -10,7 +15,10 @@
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
 }
 
-/* Theme Blueprint - Applied to .container and .hero-panel */
+/* Theme Blueprint
+   The layered multi-stop gradient creates a technical schematic
+   look: fine 20px grid + coarser 100px grid + coloured radial glows.
+   Applied to .container and .hero-panel via the schematic-breathe animation. */
 .theme-blueprint {
   background:
     linear-gradient(rgba(var(--jinx-cyan-rgb), 0.045) 1px, transparent 1px) 0
@@ -44,7 +52,10 @@
   animation: schematic-breathe 5s ease-in-out infinite;
 }
 
-/* Shrapnel Geometry */
+/* Shrapnel Geometry
+   12-point clip-path that produces the signature Jinx-style
+   asymmetric notched corners. Mirrored exactly on .container
+   in 3-layout.css and .hero-panel in home.css. */
 .clip-shrapnel {
   clip-path: polygon(
     0 15px,
@@ -62,7 +73,11 @@
   );
 }
 
-/* Animations */
+/* --- Keyframe Animations --- */
+
+/* schematic-breathe: alternates the container's outer glow between
+   cyan/purple (resting) and pink/purple (50% mark) to simulate
+   an active electronics panel. */
 @keyframes schematic-breathe {
   0%,
   100% {
@@ -82,6 +97,8 @@
       inset 0 1px 0 rgba(var(--jinx-pink-rgb), 0.12);
   }
 }
+/* signal-travel: moves the gradient highlight on container::before
+   from left-of-frame to right-of-frame, simulating a data signal. */
 @keyframes signal-travel {
   0% {
     background-position: -200px 0;
@@ -90,6 +107,8 @@
     background-position: calc(100% + 200px) 0;
   }
 }
+/* node-ping: pulses box-shadows at the left (pink) and right (cyan) ends
+   of the signal line to simulate active network nodes at each terminus. */
 @keyframes node-ping {
   0%,
   100% {
@@ -109,7 +128,8 @@
   }
 }
 
-/* Scanline Reveal Animation (Used in Profile & Transcoder) */
+/* scanline: a subtle fade-in + upward slide used when profile edit
+   panels animate into view (.module-edit.active in profile.css). */
 @keyframes scanline {
   from {
     opacity: 0;
@@ -121,7 +141,11 @@
   }
 }
 
-/* Hexcore Glitch Text */
+/* Hexcore Glitch Text
+   Three-layer technique: the real element + two ::before/::after
+   pseudo-copies coloured pink and cyan, offset by 2–3px and animated
+   independently to create the chromatic aberration glitch look.
+   mix-blend-mode: screen prevents the overlay from going fully opaque. */
 .glitch-heavy {
   position: relative;
   display: inline-block;

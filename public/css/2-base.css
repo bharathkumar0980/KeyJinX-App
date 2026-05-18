@@ -1,5 +1,9 @@
 /* ============================================================
-   [2] BASE TYPOGRAPHY & RESETS
+   2-base.css | GLOBAL RESET & TYPOGRAPHY
+   Normalises browser defaults and defines the shared heading
+   system (h1–h3) that renders across all pages.
+   The background image is fixed-attachment so it parallax-scrolls
+   independently of page content.
    ============================================================ */
 * {
   box-sizing: border-box;
@@ -22,7 +26,9 @@ body {
   align-items: center;
 }
 
-/* Arcane Heading System */
+/* Arcane Heading System
+   All headings use monospaced fonts and animated underline
+   pseudoelements rendered via ::after to reinforce the HUD aesthetic. */
 .page-header {
   text-align: center;
   margin-bottom: 30px;
@@ -45,6 +51,7 @@ h1:not(.hero-heading) {
     0 0 22px rgba(var(--jinx-cyan-rgb), 0.35),
     2px 2px 0 rgba(var(--jinx-pink-rgb), 0.35);
 }
+/* H1 underline: a pink→cyan gradient bar centred below the title */
 h1:not(.hero-heading)::after {
   content: "";
   width: min(220px, 65%);
@@ -75,6 +82,7 @@ h2 {
   transform: rotate(-1deg);
   position: relative;
 }
+/* H2 underline: pink gradient, rotated slightly for a hand-drawn feel */
 h2::after {
   content: "";
   width: 110px;
@@ -97,6 +105,7 @@ h3 {
   transform: rotate(-1deg);
   position: relative;
 }
+/* H3 underline: solid pink bar, faded to 70% opacity */
 h3::after {
   content: "";
   width: 80px;

@@ -2,8 +2,12 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Log = require("../models/Logs");
 
-// @desc    Fetch current user profile
-// @route   GET /api/profile
+/**
+ * Get Authenticated User Profile
+ * @route GET /api/profile
+ * @description Returns the authenticated operative's public identity fields.
+ * Sensitive fields (password, recoveryKey) are explicitly excluded from the response.
+ */
 exports.getProfile = async (req, res) => {
   try {
     const activeId = req.user.userId || req.user.id || req.user._id;
@@ -17,8 +21,13 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-// @desc    Update user profile matrix
-// @route   PUT /api/profile
+/**
+ * Update User Profile
+ * @route PUT /api/profile
+ * @description Updates name, email, or master password.
+ * A password change also triggers a vault migration on the client side;
+ * this endpoint only validates the current password and persists the new hash.
+ */
 exports.updateProfile = async (req, res) => {
   try {
     const { name, email, currentPassword, newPassword } = req.body;
@@ -27,7 +36,7 @@ exports.updateProfile = async (req, res) => {
 
     let passwordChanged = false;
 
-    // 1. Handle Password Change
+    // Verify the current password before allowing a master key change
     if (newPassword) {
       if (!currentPassword) {
         return res
@@ -52,7 +61,7 @@ exports.updateProfile = async (req, res) => {
       passwordChanged = true;
     }
 
-    // 2. Handle Email Change
+    // Enforce email uniqueness before applying the change
     if (email && email !== user.email) {
       const existing = await User.findOne({ email });
       if (existing)
@@ -62,7 +71,7 @@ exports.updateProfile = async (req, res) => {
       user.email = email;
     }
 
-    // 3. Handle Name Change
+    // Apply display name update
     if (name && name !== user.name) {
       user.name = name;
     }

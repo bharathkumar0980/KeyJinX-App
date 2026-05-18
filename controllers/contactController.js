@@ -1,15 +1,19 @@
 const Message = require('../models/Message');
 
+/**
+ * Contact Form Submission Handler
+ * @route POST /api/contact
+ * @description Receives and persists a plain-text contact enquiry from the public-facing form.
+ * This endpoint is unauthenticated and intentionally open for public access.
+ */
 exports.submitContactForm = async (req, res) => {
     try {
-        console.log("📥 Received Contact Data:", req.body);
         const { name, email, subject, message } = req.body;
 
         // Create the new message document
         const newMessage = new Message({ name, email, subject, message});
         
         await newMessage.save();
-        console.log("✅ Message saved to MongoDB");
 
         res.status(201).json({ 
             success: true, 

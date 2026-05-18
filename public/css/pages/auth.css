@@ -1,5 +1,9 @@
 /* =========================================
-   [PAGE] AUTHENTICATION & MANAGER UI
+   pages/auth.css | AUTHENTICATION & VAULT MANAGER UI
+   Styles the login/register card, the emergency reset panel,
+   and the vault manager status bar. The auth card uses a
+   clip-path for the bevelled corner and a scanline watermark
+   via ::before for the HUD aesthetic.
    ========================================= */
 .auth-wrapper {
   display: flex;

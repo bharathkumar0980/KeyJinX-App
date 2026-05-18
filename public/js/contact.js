@@ -1,5 +1,13 @@
 /**
- * KEYJINX - Contact Form Handler
+ * @file contact.js
+ * @description Handles contact form submissions by posting plain-text inquiries to the backend.
+ * These messages are stored unencrypted and are only visible to the Admin via the dashboard.
+ */
+
+/**
+ * Contact Form Submission Handler
+ * Gathers form data and POSTs it to the API. No authentication is required
+ * since this is an open channel for public enquiries.
  */
 document.getElementById('contactForm')?.addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -18,7 +26,7 @@ document.getElementById('contactForm')?.addEventListener('submit', async functio
             body: JSON.stringify(formData)
         });
 
-        // This will now receive actual JSON instead of index.html
+        // Parse the JSON response (the catch-all SPA route would otherwise return index.html)
         const data = await response.json();
 
         if (response.ok) {
@@ -33,6 +41,10 @@ document.getElementById('contactForm')?.addEventListener('submit', async functio
     }
 });
 
+/**
+ * Utility: Contact Page Toast Notification
+ * Standalone toast isolated from script.js to avoid cross-page dependency.
+ */
 function contactToast(msg, type = "success") {
     let toast = document.getElementById("toast");
     if (!toast) {

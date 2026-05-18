@@ -1,8 +1,15 @@
 /**
- * KEYJINX - Text Transcoder Logic
- * Zero-Knowledge Implementation
+ * @file encrypt.js
+ * @description Handles client-side text encryption and decryption using CryptoJS.
+ * Employs a Zero-Knowledge Architecture (ZKA) where plain-text and secret keys 
+ * never leave the user's browser during transcoding operations.
  */
 
+/**
+ * Transcodes text based on the specified mode (Encrypt or Decrypt).
+ * Uses AES-256 (Advanced Encryption Standard) provided by CryptoJS.
+ * @param {string} mode - 'encrypt' or 'decrypt'
+ */
 function processText(mode) {
     const text = document.getElementById('rawText').value.trim();
     const key = document.getElementById('secretKey').value.trim();

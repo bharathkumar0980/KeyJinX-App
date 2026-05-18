@@ -1,29 +1,37 @@
 /* ============================================================
-   [1] GLOBAL VARIABLES & THEMING 
+   1-theme.css | GLOBAL DESIGN TOKENS & THEMING
+   Defines all CSS custom properties (variables) that power the
+   Hextech / Arcane aesthetic across the entire application.
+   All colours are stored as raw RGB channels so they can be
+   composited with rgba() transparency at point of use.
    ============================================================ */
 :root {
-  /* Core Hextech Palette */
+  /* --- Jinx Signature Palette ---
+     Raw RGB channels (no alpha) for flexible rgba() composition */
   --jinx-pink-rgb: 255, 0, 200;
   --jinx-cyan-rgb: 0, 229, 255;
   --jinx-purple-rgb: 180, 0, 255;
 
-  /* Surface & Backgrounds */
+  /* --- Surface & Background Colours --- */
   --bg-main: #241733;
   --bg-panel-rgb: 8, 10, 14;
 
-  /* Typography & Text */
+  /* --- Typography & Text Hierarchy --- */
   --text-main-rgb: 223, 248, 255;
   --color-text-primary: #dff8ff;
   --color-text-secondary: #a1a1aa;
   --color-text-tertiary: #6b7280;
   --font-mono: "Consolas", "Courier New", monospace;
 
-  /* Status Indicators */
+  /* --- Semantic Status Colours ---
+     Used for log entries (ok/warn/err) and UI feedback states */
   --success-rgb: 0, 230, 118;
   --danger-rgb: 255, 76, 76;
   --warning-rgb: 255, 170, 0;
 
-  /* Glassmorphism System */
+  /* --- Glassmorphism System ---
+     Pre-composed values used by .glass-panel and card components.
+     --glass-blur uses backdrop-filter for the frosted-glass effect. */
   --glass-bg: rgba(6, 8, 12, 0.65);
   --glass-border: rgba(var(--jinx-cyan-rgb), 0.2);
   --glass-blur: blur(12px);

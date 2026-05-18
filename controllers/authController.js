@@ -4,8 +4,13 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Vault = require("../models/Vault");
 
-// @desc    Register a new operative
-// @route   POST /api/auth/register
+/**
+ * Registration Handler
+ * @route POST /api/auth/register
+ * @description Creates a new user account (operative).
+ * Crucially, generates a one-time-viewable recovery key. Both the master password 
+ * and the recovery key are hashed using bcrypt before database storage.
+ */
 exports.registerUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -15,7 +20,7 @@ exports.registerUser = async (req, res) => {
       return res.status(400).json({ message: "Operative already exists." });
     }
 
-    // 1. Generate a raw Recovery Key (Format: KJX-XXXX-XXXX-XXXX)
+    // Cryptographic Key Generation: Create a high-entropy recovery key (Format: KJX-XXXX-XXXX-XXXX)
     const rawRecoveryKey = `KJX-${crypto
       .randomBytes(6)
       .toString("hex")
@@ -26,10 +31,10 @@ exports.registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // 2. Hash the Recovery Key exactly like a password
+    // Security: Hash the recovery key so even DB admins cannot view it natively
     const hashedRecoveryKey = await bcrypt.hash(rawRecoveryKey, salt);
 
-    // 3. Save both to the database
+    // Persist to database
     user = new User({
       email,
       password: hashedPassword,
@@ -37,7 +42,7 @@ exports.registerUser = async (req, res) => {
     });
     await user.save();
 
-    // 4. Send the PLAIN key back ONLY THIS ONCE
+    // Final transmission: Send the raw recovery key to the client. This is the ONLY time this key will ever exist in plain text.
     res.status(201).json({
       message: "Vault Key Forged Successfully!",
       recoveryKey: rawRecoveryKey,
@@ -48,8 +53,12 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// @desc    Authenticate operative & get token
-// @route   POST /api/auth/login
+/**
+ * Login Handler
+ * @route POST /api/auth/login
+ * @description Authenticates the user against their bcrypt-hashed master password.
+ * Issues a JWT upon success, embedding the user's role for frontend RBAC routing.
+ */
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -68,8 +77,8 @@ exports.loginUser = async (req, res) => {
     const token = jwt.sign(
       {
         id: user._id,
-        role: user.role, // ✅ ADD THIS: Save the role to the token
-        email: user.email, // (Optional but helpful for your backend logs)
+        role: user.role, // Embedded role used by frontend for UI state rendering
+        email: user.email, // Attached for backend auditing contexts
       },
       process.env.JWT_SECRET || "secret_key_123",
       { expiresIn: "1d" },
@@ -80,25 +89,32 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({ message: "Login error." });
   }
 };
-
+/**
+ * Emergency Password Reset Handler
+ * @route POST /api/auth/reset-password
+ * @description Permits recovery of an account using the recovery key. 
+ * Because the system is Zero-Knowledge and relies on the master password to derive the vault encryption key, 
+ * resetting the master password permanently invalidates all previously encrypted vault entries. 
+ * Therefore, this endpoint intentionally PURGES the user's vault to prevent cryptographic deadlocks.
+ */
 exports.resetPassword = async (req, res) => {
   try {
     const { email, recoveryKey, newPassword } = req.body;
 
-    // 1. Find the operative
+    // Locate the compromised/locked account
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "Operative not found." });
 
-    // 2. Verify the Recovery Key
+    // Cryptographic validation of the provided recovery key
     const isMatch = await bcrypt.compare(recoveryKey, user.recoveryKey);
     if (!isMatch)
       return res.status(401).json({ message: "Invalid Recovery Key." });
 
-    // 3. THE BRUTAL WIPE: Delete all passwords linked to this user
-    // We do this because the old passwords were encrypted with the LOST password!
+    // ZERO-KNOWLEDGE ENFORCEMENT: Purge all existing vault entries.
+    // The old data is permanently inaccessible because the decryption key (derived from the old password) is lost.
     await Vault.deleteMany({ user: user._id });
 
-    // 4. Hash and save the new Master Password
+    // Persist the newly forged master password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
     await user.save();

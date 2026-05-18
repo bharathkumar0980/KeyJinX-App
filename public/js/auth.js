@@ -1,6 +1,8 @@
-// ==========================================
-// KeyJinX - Authentication UI Logic
-// ==========================================
+/**
+ * @file auth.js
+ * @description Handles client-side authentication logic including registration, login, and emergency recovery.
+ * Manages UI toggling between authentication states and coordinates with the backend API.
+ */
 
 document.addEventListener("DOMContentLoaded", () => {
   const loginSection = document.getElementById("loginSection");
@@ -8,7 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const showRegisterBtn = document.getElementById("showRegisterBtn");
   const showLoginBtn = document.getElementById("showLoginBtn");
 
-  // 1. UI Toggle Logic
+  /**
+   * UI Toggle Handlers
+   * Switches the visible authentication forms (Login vs. Register) dynamically
+   * without requiring page reloads.
+   */
   showRegisterBtn?.addEventListener("click", (e) => {
     e.preventDefault();
     loginSection.style.display = "none";
@@ -23,7 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("pageTitle").innerText = "VAULT ACCESS";
   });
 
-  // 2. Register Submission
+  /**
+   * Registration Handler
+   * Submits new user credentials. Upon success, captures and prominently displays
+   * the emergency recovery key which is only returned ONCE from the server.
+   */
   document
     .getElementById("registerForm")
     ?.addEventListener("submit", async (e) => {
@@ -54,7 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-  // 3. Login Submission
+  /**
+   * Login Handler
+   * Authenticates the user and sets up the local environment (Tokens, Roles, and Vault Keys).
+   */
   document
     .getElementById("loginForm")
     ?.addEventListener("submit", async (e) => {
@@ -68,12 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      // Inside your login fetch request in auth.js:
-      // Inside your login fetch request in auth.js
       if (res.ok) {
         localStorage.setItem("keyjinx_token", data.token);
 
-        // 🛠️ FIX 1: Save the email as the initial fallback identifier
+        // Persist email identifier for UI context (e.g., Navbar profile)
         const email = document.getElementById("loginEmail").value;
         localStorage.setItem("keyjinx_user_email", email);
 
@@ -81,9 +92,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const vaultKey = CryptoJS.SHA256(rawPassword).toString();
         sessionStorage.setItem("keyjinx_vault_key", vaultKey);
 
+        // Decode JWT payload to determine user role and redirect to the appropriate dashboard
+        const tokenPayload = JSON.parse(atob(data.token.split(".")[1]));
+        const userRole = tokenPayload.role;
+        localStorage.setItem("keyjinx_user_role", userRole);
+
         showToast("Authentication successful. Decrypting vault...", "success");
         setTimeout(() => {
-          window.location.href = "manager.html";
+          // Redirect to admin page if user is an admin, otherwise to manager
+          const redirectPage =
+            userRole === "The Admin" ? "admin.html" : "manager.html";
+          window.location.href = redirectPage;
         }, 1500);
       } else {
         showToast(data.message, "error");
@@ -91,7 +110,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// 4. Emergency Override Submission
+/**
+ * Emergency Override / Password Reset Handler
+ * Submits the recovery key along with a new password to recalibrate the vault.
+ * Note: Resetting the password purges existing encrypted data due to key regeneration.
+ */
 document.getElementById("resetForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -100,7 +123,7 @@ document.getElementById("resetForm")?.addEventListener("submit", async (e) => {
   const newPassword = document.getElementById("newPassword").value;
   const confirmPassword = document.getElementById("confirmNewPassword").value;
 
-  // 🛠️ NEW: Validation Check to prevent accidental lockouts
+  // Validation Check: Ensure new passwords match to prevent accidental lockouts after recovery
   if (newPassword !== confirmPassword) {
     return showToast("New passwords do not match. Aborting.", "error");
   }

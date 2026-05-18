@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
-
+/**
+ * @module Message
+ * @description Mongoose schema for contact form submissions.
+ * These are the plain-text inquiries sent to the Admin Dashboard.
+ */
 const messageSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },

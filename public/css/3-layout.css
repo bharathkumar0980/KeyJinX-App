@@ -1,5 +1,9 @@
 /* ============================================================
-   [3] STRUCTURAL LAYOUT CONTAINERS
+   3-layout.css | STRUCTURAL LAYOUT & NAVIGATION
+   Defines the primary .container card, the fixed navigation bar,
+   and the responsive hamburger menu.
+   The .container uses a layered background of micro-grids and
+   radial glows to create the 'Hextech blueprint' effect.
    ============================================================ */
 .container {
   width: 95%;
@@ -7,6 +11,7 @@
   margin: 40px auto;
   padding: 60px;
   position: relative;
+  /* z-index: 5 ensures the card sits above the body background but below the fixed nav (z:10000) */
   z-index: 5;
   background:
     linear-gradient(rgba(var(--jinx-cyan-rgb), 0.045) 1px, transparent 1px) 0
@@ -51,6 +56,7 @@
     0 calc(100% - 40px)
   );
   border: 1px dashed rgba(var(--jinx-cyan-rgb), 0.45);
+  /* Idle breathing animation: alternate cyan/pink glow to simulate a live HUD panel */
   animation: schematic-breathe 5s ease-in-out infinite;
   transition:
     transform 0.35s cubic-bezier(0.19, 1, 0.22, 1),
@@ -59,6 +65,7 @@
 }
 
 .container::before {
+  /* Container::before – animated signal line that travels horizontally across the top edge */
   content: "";
   position: absolute;
   top: 46px;
@@ -144,6 +151,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 0 0 0 30px;
+  /* Fixed-position bar stacked above all content via z-index: 10000 */
   z-index: 10000;
   border-bottom: 2px solid rgb(var(--jinx-pink-rgb));
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.9);
@@ -239,7 +247,8 @@ nav .logo {
   background: rgba(var(--jinx-cyan-rgb), 0.15) !important;
 }
 
-/* Session Block */
+/* Session Block: the pink angled panel on the right housing the user's name and logout.
+   clip-path polygon creates the diagonal left edge. */
 .nav-session-block {
   display: flex;
   align-items: center;
@@ -332,7 +341,7 @@ a.op-info {
 /* ============================================================
    MOBILE NAVIGATION & HAMBURGER MENU (PURE TEXT)
    ============================================================ */
-/* Hide the mobile text list on Desktop */
+/* Hide the desktop nav links on mobile; only the hamburger is visible */
 .mobile-item {
   display: none !important;
 }
@@ -390,7 +399,8 @@ a.op-info {
     position: fixed !important;
     top: 60px !important;
     left: -100% !important;
-    width: 100% !important; /* FIX: Changed from 100vw to 100% to respect scrollbars */
+    /* Changed from 100vw to 100% to avoid adding a horizontal scrollbar when content overflows */
+    width: 100% !important;
     height: calc(100vh - 60px) !important;
     background-color: #080a0e !important;
     background-image:
@@ -404,9 +414,9 @@ a.op-info {
     flex-direction: column !important;
     justify-content: flex-start !important;
     padding-top: 40px !important;
-    padding-bottom: 60px !important; /* FIX: Added bottom padding so the button clears the edge */
-    overflow-y: auto !important; /* FIX: Allows the menu to scroll internally on small screens */
-    overflow-x: hidden !important; /* FIX: Prevents horizontal scrolling */
+    padding-bottom: 60px !important; /* Extra space so the last menu item clears the screen edge on small phones */
+    overflow-y: auto !important; /* Allows the menu to scroll internally on short screens */
+    overflow-x: hidden !important; /* Prevents horizontal drift when items are wide */
     transition: left 0.4s cubic-bezier(0.19, 1, 0.22, 1) !important;
     z-index: 9999 !important;
   }

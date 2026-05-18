@@ -4,7 +4,10 @@ const express = require('express');
 const path = require('path');
 const connectDB = require('./config/db');
 
-// Import Routes
+/**
+ * Route Module Imports
+ * These modules define the API endpoints for various subsystems.
+ */
 const vaultRoutes = require('./routes/vaultRoutes');
 const authRoutes = require('./routes/authRoutes');
 const contactRoutes = require('./routes/contactRoutes');
@@ -14,24 +17,34 @@ const profileRoutes = require('./routes/profileRoutes');
 const app = express();
 connectDB();
 
-// --- 1. MIDDLEWARE (MUST BE FIRST) ---
+/**
+ * 1. Global Middleware
+ * Must be registered before routes to parse incoming JSON payloads.
+ */
 app.use(express.json()); 
 
-// --- 2. API ROUTES (MUST BE SECOND) ---
-// We put these here so the server checks for data requests first
+/**
+ * 2. API Route Registration
+ * Registered before static files to ensure API requests are intercepted early
+ * and not accidentally resolved to a static directory.
+ */
 app.use('/api/auth', authRoutes);
 app.use('/api/vault', vaultRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/profile', profileRoutes);
 
-// --- 3. STATIC FILES (THIRD) ---
+/**
+ * 3. Static Asset Serving
+ * Exposes the 'public' directory for frontend assets (HTML, CSS, JS).
+ */
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- 4. FRONTEND ROUTING (LAST) ---
 /**
- * Using a Regex ensures that only non-API routes 
- * return the index.html file.
+ * 4. Frontend Routing (Catch-All)
+ * Uses a negative lookahead regex to match all routes EXCEPT those starting with /api.
+ * This ensures that direct URL navigation (e.g., /manager) serves the SPA's entry point,
+ * allowing client-side routing to take over without interfering with backend APIs.
  */
 app.get(/^((?!\/api).)*$/, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -44,13 +57,16 @@ app.listen(PORT, () => {
 
 const Log = require("./models/Logs"); // Adjust the path if necessary
 
-// Inside your mongoose.connect().then(...) block:
+/**
+ * Database Connection & Initialization
+ * Establishes connection to MongoDB and writes a boot-up log entry.
+ */
 mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
     console.log("MongoDB Connected");
     
-    // 🛠️ Log the server startup to the database
     try {
+      // Record server startup sequence in the persistent system log
       await Log.create({
         type: "ok",
         code: "SYS_BOOT",

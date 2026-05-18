@@ -1,6 +1,11 @@
 const Vault = require("../models/Vault");
 
-// GET: Server blindly returns the encrypted database documents
+/**
+ * Retrieve Vault Entries
+ * @route GET /api/vault
+ * @description Returns the encrypted vault documents for the authenticated user.
+ * The server acts only as a storage medium; it has zero knowledge of the decrypted contents.
+ */
 exports.getPasswords = async (req, res) => {
   try {
     const passwords = await Vault.find({ user: req.user.id });
@@ -11,7 +16,12 @@ exports.getPasswords = async (req, res) => {
   }
 };
 
-// POST: Server blindly saves the pre-encrypted password
+/**
+ * Store New Vault Entry
+ * @route POST /api/vault
+ * @description Saves a new credential entry. The password field must be pre-encrypted 
+ * by the client before transit. The server blindly persists the ciphertext.
+ */
 exports.addPassword = async (req, res) => {
   try {
     const { website, username, password } = req.body;
@@ -20,7 +30,7 @@ exports.addPassword = async (req, res) => {
       return res.status(401).json({ message: "User not identified" });
     }
 
-    // 🛠️ NO SERVER ENCRYPTION HERE! The 'password' is already encrypted by the browser.
+    // ZERO-KNOWLEDGE ARCHITECTURE: The 'password' field is already encrypted ciphertext from the browser. No server-side encryption occurs here.
     const newEntry = new Vault({
       website,
       username,
@@ -36,6 +46,11 @@ exports.addPassword = async (req, res) => {
   }
 };
 
+/**
+ * Delete Vault Entry
+ * @route DELETE /api/vault/:id
+ * @description Permanently vaporizes a credential entry from the database.
+ */
 exports.deletePassword = async (req, res) => {
   try {
     const { id } = req.params;
@@ -52,6 +67,11 @@ exports.deletePassword = async (req, res) => {
   }
 };
 
+/**
+ * Update Vault Entry
+ * @route PUT /api/vault/:id
+ * @description Updates an existing entry. The incoming password must be pre-encrypted ciphertext.
+ */
 exports.updateVaultEntry = async (req, res) => {
   try {
     const { website, username, password } = req.body;
@@ -59,7 +79,7 @@ exports.updateVaultEntry = async (req, res) => {
 
     const updatedEntry = await Vault.findOneAndUpdate(
       { _id: entryId, user: req.user.id },
-      { website, username, password }, // 🛠️ Saving blind ciphertext
+      { website, username, password }, // Persisting blind ciphertext
       { new: true },
     );
 
@@ -71,7 +91,12 @@ exports.updateVaultEntry = async (req, res) => {
   }
 };
 
-// POST: Bulk update the vault (Used for Cryptographic Migrations)
+/**
+ * Vault Migration
+ * @route POST /api/vault/migrate
+ * @description Used for bulk cryptographic migrations (e.g., when a user changes their master password).
+ * Accepts an array of re-encrypted ciphertexts and updates all database entries sequentially.
+ */
 exports.migrateVault = async (req, res) => {
     try {
         const { encryptedVault } = req.body;

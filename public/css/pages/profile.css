@@ -1,5 +1,8 @@
 /* ============================================================
-   [PAGE] OPERATIVE PROFILE HUD
+   pages/profile.css | OPERATIVE PROFILE HUD
+   Defines the dossier card layout, data modules (editable fields),
+   and the inline message system. The .module-edit.active state
+   triggers the scanline animation from 5-effects.css.
    ============================================================ */
 .dossier-wrapper {
   background: rgba(6, 8, 12, 0.85);
@@ -36,7 +39,8 @@
   color: rgb(var(--jinx-purple-rgb));
   box-shadow: 0 0 15px rgba(var(--jinx-purple-rgb), 0.4);
 }
-/* Stops the global H2 rotation for the profile name */
+/* Override the global H2 rotation and underline
+   because the dossier name doesn't need the skewed heading style */
 .dossier-meta h2 {
   margin: 0;
   font-size: 1.5rem;
@@ -182,7 +186,7 @@
   padding: 12px;
   font-family: var(--font-mono);
   font-size: 14px;
-  border-radius: 4px; /* Restored rounded corners specific to HUD */
+  border-radius: 4px; /* Slight rounding for profile HUD inputs vs. the fully square form inputs on other pages */
   outline: none;
   transition: 0.3s;
   margin-bottom: 10px;

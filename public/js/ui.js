@@ -1,8 +1,16 @@
-// ==========================================
-// KeyJinX - User Interface & Experience Logic
-// ==========================================
+/**
+ * @file ui.js
+ * @description Shared UI utility functions for the Vault Manager page.
+ * Handles password visibility toggling and real-time password strength analysis.
+ */
 
-// Toggle Password Visibility in the Vault
+/**
+ * Toggle Password Visibility
+ * Switches the input type between 'password' and 'text', updating the icon
+ * colour to provide a clear visual indicator of the current state.
+ * @param {string} inputId - The ID of the target input element.
+ * @param {HTMLElement} iconElement - The Font Awesome icon element to update.
+ */
 function toggleVaultVisibility(inputId, iconElement) {
     const input = document.getElementById(inputId);
     if (input.type === "password") {
@@ -18,7 +26,12 @@ function toggleVaultVisibility(inputId, iconElement) {
     }
 }
 
-// Check Password Strength for New Entries
+/**
+ * Password Strength Analyser
+ * Evaluates the strength of a given password against 5 criteria (length,
+ * lowercase, uppercase, numbers, special chars) and updates the strength bar UI.
+ * @param {string} password - The raw password string to evaluate.
+ */
 function checkVaultStrength(password) {
     const bar = document.getElementById("vault-strength-bar");
     const text = document.getElementById("vault-strength-text");

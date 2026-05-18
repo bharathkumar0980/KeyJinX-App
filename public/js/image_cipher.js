@@ -1,8 +1,16 @@
 /**
- * KEYJINX - Image Encryption Logic
- * Client-Side Zero-Knowledge Protocol
+ * @file image_cipher.js
+ * @description Client-side image encryption and decryption using AES-256 (CryptoJS).
+ * Implements a Zero-Knowledge Protocol: the image binary is converted to a Base64 DataURL
+ * string, encrypted entirely in-browser, and saved as a proprietary `.kjx` ciphertext file.
+ * The server is never involved in this process.
  */
 
+/**
+ * Toggle Secret Key Input Visibility
+ * @param {string} inputId - ID of the key input field.
+ * @param {HTMLElement} iconElement - The eye icon element to toggle.
+ */
 function toggleVisibility(inputId, iconElement) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -20,6 +28,13 @@ function toggleVisibility(inputId, iconElement) {
     }
 }
 
+/**
+ * Core Image Cipher
+ * Reads the selected image file and either encrypts or decrypts it using AES-256.
+ * - Encrypt: Reads as DataURL → AES encrypt → download as `.kjx` text file.
+ * - Decrypt: Reads `.kjx` text → AES decrypt → validate DataURL prefix → download as PNG.
+ * @param {string} mode - 'encrypt' or 'decrypt'
+ */
 async function processImage(mode) {
     const fileInput = document.getElementById('imageInput');
     const key = document.getElementById('cipherKey').value;
@@ -57,7 +72,7 @@ async function processImage(mode) {
                 preview.src = decrypted;
                 preview.style.display = "block";
                 
-                // 3. 🛠️ FIX: Convert the DataURL string into a REAL Binary Blob
+                // Convert the Base64 DataURL back into a real binary Blob before download
                 createDownload(decrypted, "decrypted_image.png", "image/png", true);
                 showToast("Identity verified. Image unlocked.");
             }
@@ -70,13 +85,20 @@ async function processImage(mode) {
     };
 
     if (mode === 'encrypt') {
-        reader.readAsDataURL(file); // Read binary image -> text DataURL
+        reader.readAsDataURL(file); // Binary image → Base64 DataURL string for AES input
     } else {
-        reader.readAsText(file);    // Read .kjx file -> text ciphertext
+        reader.readAsText(file);    // .kjx ciphertext file → plain text for AES decryption
     }
 }
 
-// 🛠️ HELPER: Converts Base64 "Text" into "Binary" Data
+/**
+ * DataURL to Blob Converter
+ * Splits the Base64 DataURL into MIME type and raw binary parts,
+ * then constructs a typed Uint8Array to produce a true binary Blob.
+ * This is required for the browser's download link to save a valid image file.
+ * @param {string} dataurl - A Base64 encoded DataURL (e.g., 'data:image/png;base64,...').
+ * @returns {Blob} A binary Blob of the decoded image data.
+ */
 function dataURLToBlob(dataurl) {
     const arr = dataurl.split(',');
     const mime = arr[0].match(/:(.*?);/)[1];
@@ -89,10 +111,19 @@ function dataURLToBlob(dataurl) {
     return new Blob([u8arr], {type:mime});
 }
 
+/**
+ * Create Download Link
+ * Generates a temporary object URL and injects a download anchor into the DOM.
+ * Uses the DataURL-to-Blob helper for images to ensure a valid binary file is saved.
+ * @param {string} content - The raw content (ciphertext string or Base64 DataURL).
+ * @param {string} fileName - The filename for the download.
+ * @param {string} mimeType - The MIME type of the output file.
+ * @param {boolean} isDataURL - If true, content is treated as a DataURL and converted to a Blob.
+ */
 function createDownload(content, fileName, mimeType, isDataURL) {
     const container = document.getElementById('downloadLinkContainer');
     
-    // 🛠️ FIX: Use the helper for images, keep text for .kjx files
+    // Route to binary conversion for images, or wrap raw text for .kjx cipher files
     const blob = isDataURL ? dataURLToBlob(content) : new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
     

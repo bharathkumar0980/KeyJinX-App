@@ -1,13 +1,20 @@
-// ==========================================
-// KeyJinX Vault - Frontend Client Logic
-// (Zero-Knowledge Architecture Enabled)
-// ==========================================
+/**
+ * @file script.js
+ * @description Core client logic for the Vault Manager.
+ * Implements a Zero-Knowledge Architecture (ZKA): All data encryption and decryption 
+ * happens locally in the browser using the vault key stored in sessionStorage. 
+ * The backend server only ever receives and stores ciphertext.
+ */
 
-// 1. Fetch and Display Passwords from MongoDB Cloud
+/**
+ * Fetch and Display Passwords
+ * Retrieves encrypted vault entries from the server and decrypts them locally 
+ * using the ephemeral vault key stored in sessionStorage.
+ */
 async function showPasswords() {
   const token = localStorage.getItem("keyjinx_token");
 
-  // 🛠️ FIX 2: If the name isn't in the cache, fetch it from the profile
+  // Identity Cache check: Fetch user profile data if not present locally
   if (!localStorage.getItem("keyjinx_user_name")) {
     try {
       const profileRes = await fetch("/api/profile", {
@@ -26,7 +33,8 @@ async function showPasswords() {
     }
   }
   const table = document.querySelector("table");
-  const vaultKey = sessionStorage.getItem("keyjinx_vault_key"); // 🛠️ ZERO-KNOWLEDGE: Get the decryption key
+  // ZERO-KNOWLEDGE ARCHITECTURE: Retrieve the ephemeral decryption key from secure memory
+  const vaultKey = sessionStorage.getItem("keyjinx_vault_key");
 
   if (!token) {
     console.warn("No token found, redirecting to login...");
@@ -34,7 +42,7 @@ async function showPasswords() {
     return;
   }
 
-  // 🛠️ ZERO-KNOWLEDGE: If they have a token but no memory key (e.g., opened a new tab), force re-login
+  // Security Enforcement: If a token exists but the memory key is absent (e.g., new tab), force re-authentication
   if (!vaultKey) {
     console.warn(
       "No decryption key found in active memory. Forcing re-authentication.",
@@ -74,7 +82,7 @@ async function showPasswords() {
       return;
     }
 
-    // 🛠️ ZERO-KNOWLEDGE: Decrypt the ciphertext arriving from the server
+    // ZERO-KNOWLEDGE ARCHITECTURE: Decrypt the ciphertext payload arriving from the server
     const decryptedData = rawData.map((entry) => {
       try {
         const bytes = CryptoJS.AES.decrypt(entry.password, vaultKey);
@@ -138,12 +146,16 @@ async function showPasswords() {
   }
 }
 
-// 2. Intercept the manager.html Form Submit (Handles both SAVE and UPDATE)
+/**
+ * Form Submit Interceptor (Handles both SAVE and UPDATE)
+ * Captures the raw password, encrypts it locally via AES, and transmits only the ciphertext.
+ */
 document.querySelector("form").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const token = localStorage.getItem("keyjinx_token");
-  const vaultKey = sessionStorage.getItem("keyjinx_vault_key"); // 🛠️ ZERO-KNOWLEDGE: Get the encryption key
+  // Retrieve the encryption key from ephemeral storage
+  const vaultKey = sessionStorage.getItem("keyjinx_vault_key");
 
   if (!vaultKey) {
     showToast("Encryption key lost. Please log in again.", "error");
@@ -155,7 +167,7 @@ document.querySelector("form").addEventListener("submit", async function (e) {
   const username = document.getElementById("username").value;
   const rawPassword = document.getElementById("password").value;
 
-  // 🛠️ ZERO-KNOWLEDGE: Encrypt the password BEFORE it leaves the browser
+  // ZERO-KNOWLEDGE ARCHITECTURE: Encrypt the password BEFORE it leaves the browser environment
   const encryptedPassword = CryptoJS.AES.encrypt(
     rawPassword,
     vaultKey,
@@ -172,7 +184,7 @@ document.querySelector("form").addEventListener("submit", async function (e) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      // 🛠️ ZERO-KNOWLEDGE: Send the ciphertext, not the raw password
+      // Transmit the ciphertext, strictly withholding the raw password
       body: JSON.stringify({ website, username, password: encryptedPassword }),
     });
 
@@ -200,7 +212,11 @@ document.querySelector("form").addEventListener("submit", async function (e) {
   }
 });
 
-// 3. Delete a Password via API
+/**
+ * API Handler: Delete a Password
+ * Permanently removes an entry from the server.
+ * @param {string} id - The MongoDB document ID of the entry.
+ */
 async function deletePassword(id) {
   const confirmDelete = confirm(
     "Are you sure you want to vaporize this entry from the database?",
@@ -228,7 +244,10 @@ async function deletePassword(id) {
   }
 }
 
-// 4. Utility: Copy Password to Clipboard
+/**
+ * Utility: Copy to Clipboard
+ * Temporarily pushes the decrypted password into the system clipboard.
+ */
 function copyPassword(passwordText) {
   navigator.clipboard
     .writeText(passwordText)
@@ -241,7 +260,10 @@ function copyPassword(passwordText) {
     });
 }
 
-// 5. Utility: Toggle Password Visibility
+/**
+ * Utility: Toggle Password Visibility
+ * Applies/removes CSS masking to securely toggle visibility on the UI.
+ */
 function toggleMask(id, btn) {
   const textSpan = document.getElementById(`pw-${id}`);
   const icon = btn.querySelector("i");
@@ -257,7 +279,10 @@ function toggleMask(id, btn) {
   }
 }
 
-// 6. Utility: Custom Toast Notifications
+/**
+ * Utility: Custom Toast Notifications
+ * Dynamically generates and displays non-blocking alerts.
+ */
 function showToast(message, type = "success") {
   let toast = document.getElementById("toast");
 
@@ -287,7 +312,10 @@ function showToast(message, type = "success") {
   }, 3000);
 }
 
-// 7. This function fills the form with existing data so the user can change it
+/**
+ * Utility: Edit Entry Pre-fill
+ * Populates the vault form with existing data to allow for an UPDATE operation.
+ */
 function editEntry(id, website, username) {
   document.getElementById("website").value = website;
   document.getElementById("username").value = username;

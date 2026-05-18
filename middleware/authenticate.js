@@ -2,6 +2,13 @@ const jwt = require("jsonwebtoken");
 const Log = require("../models/Logs"); 
 const User = require("../models/User");
 
+/**
+ * @module AuthenticateMiddleware
+ * @description Extracts and verifies the JWT from the Authorization header.
+ * Attaches the decoded user payload to the request object (req.user).
+ * Automatically updates the user's 'lastSeen' timestamp upon successful validation.
+ * Logs unauthorized access attempts to the central audit log.
+ */
 module.exports = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];

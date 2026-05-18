@@ -1,6 +1,14 @@
+/**
+ * @file admin.js
+ * @description Controls the Admin Dashboard interactions, including real-time telemetry polling,
+ * user role management, threat mitigation logs, and encrypted transmission handling.
+ */
 const $ = (id) => document.getElementById(id);
 
-// --- 1. CORE API INTEGRATION ---
+/**
+ * Mainframe Data Aggregation
+ * Polls the backend for system vitals (CPU, Memory, Storage) and security metrics.
+ */
 async function fetchMainframeData() {
   const token = localStorage.getItem("keyjinx_token");
   if (!token) return (window.location.href = "/login.html");
@@ -98,7 +106,11 @@ async function fetchMainframeData() {
   }
 }
 
-// --- 2. MESSAGES API ---
+/**
+ * Encrypted Transmission (Messages) API
+ * Retrieves and renders contact form submissions, maintaining a zero-knowledge appearance
+ * for the dashboard until 'INSPECT' is triggered.
+ */
 async function fetchMessages(token) {
   try {
     const res = await fetch("/api/admin/messages", {
@@ -170,7 +182,10 @@ window.logout = function () {
   window.location.href = "/login.html";
 };
 
-// --- 3. LOGS SYSTEM ---
+/**
+ * System Activity Logging
+ * Fetches and displays chronological event logs for system auditing and forensics.
+ */
 async function fetchLogs() {
   const token = localStorage.getItem("keyjinx_token");
   try {
@@ -193,7 +208,10 @@ async function fetchLogs() {
   }
 }
 
-// --- 4. USER MANAGEMENT API ---
+/**
+ * User Identity and Access Management (IAM)
+ * Handles role-based clearance overrides (Promote/Demote functionality).
+ */
 async function fetchUsers() {
   const token = localStorage.getItem("keyjinx_token");
   try {
@@ -222,7 +240,7 @@ function renderUsers(users) {
     if (isAdmin) {
       actionBtn = `<button class="btn-sm danger" onclick="updateUserRole('${u._id}', 'Client', '${u.email}')">DEMOTE</button>`;
     } else {
-      actionBtn = `<button class="btn-sm danger" style="border-color:var(--jinx-purple-rgb); color:var(--jinx-purple-rgb);" onclick="updateUserRole('${u._id}', 'The Admin', '${u.email}')">PROMOTE</button>`;
+      actionBtn = `<button class="btn-sm promote" onclick="updateUserRole('${u._id}', 'The Admin', '${u.email}')">PROMOTE</button>`;
     }
 
     const tr = document.createElement("tr");
@@ -270,7 +288,11 @@ window.updateUserRole = async function (userId, newRole, email) {
   }
 };
 
-// --- 5. INITIALIZATION ---
+/**
+ * Dashboard Initialization
+ * Bootstraps the admin interface and establishes a 10-second polling interval
+ * for real-time telemetry updates.
+ */
 window.onload = () => {
   fetchMainframeData();
   fetchUsers();

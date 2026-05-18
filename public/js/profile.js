@@ -1,9 +1,18 @@
+/**
+ * @file profile.js
+ * @description Manages the operative's profile page: data fetching, field editing, 
+ * and the Zero-Knowledge Cryptographic Vault Migration triggered by a master password change.
+ */
+
 const $ = (id) => document.getElementById(id);
 const token = localStorage.getItem("keyjinx_token");
 
 if (!token) window.location.href = "login.html";
 
-// 1. Fetch and Populate Data
+/**
+ * On Load: Fetch and Populate Profile Data
+ * Retrieves the authenticated user's profile (name, email, role) and renders it to the page.
+ */
 window.onload = async () => {
   try {
     const res = await fetch("/api/profile", {
@@ -26,7 +35,11 @@ window.onload = async () => {
   }
 };
 
-// 2. Toggle Edit Panels
+/**
+ * Toggle Edit Panel
+ * Shows or hides an inline edit form for a specific field. 
+ * Pre-fills the input with the current value for convenience.
+ */
 window.toggleEdit = function (field) {
   const panel = $(`edit-${field}`);
   const row = $(`row-${field}`);
@@ -43,19 +56,24 @@ window.toggleEdit = function (field) {
     if (field === "password") {
       $("input-curr-pass").value = "";
       $("input-new-pass").value = "";
-      $("input-confirm-pass").value = ""; // 🛠️ Clear the new confirm field
+      $("input-confirm-pass").value = ""; // Reset all password fields before showing edit panel
     }
   }
 };
 
-// 3. Save Specific Field & Handle Cryptographic Migration
+/**
+ * Save Field & Handle Cryptographic Migration
+ * Handles the update for name, email, or password. A password change triggers a full
+ * Zero-Knowledge Vault Migration, which re-encrypts all existing vault entries with the new key.
+ */
 window.saveField = async function (field) {
   const payload = {};
 
   if (field === "name") payload.name = $("input-name").value;
   if (field === "email") payload.email = $("input-email").value;
 
-  // 🛠️ ZERO-KNOWLEDGE MIGRATION LOGIC
+  // ZERO-KNOWLEDGE MIGRATION: Password change requires re-encrypting all vault data
+  // because the AES vault key is derived from the master password.
   if (field === "password") {
     payload.currentPassword = $("input-curr-pass").value;
     payload.newPassword = $("input-new-pass").value;
@@ -121,7 +139,7 @@ window.saveField = async function (field) {
     }
   }
 
-  // 🛠️ STANDARD PROFILE UPDATE LOGIC (Proceeds if migration succeeds or if just updating Name/Email)
+  // Standard profile update: Proceeds after a successful migration or for non-password field changes
   try {
     const res = await fetch("/api/profile", {
       method: "PUT",
@@ -142,23 +160,24 @@ window.saveField = async function (field) {
         );
         setTimeout(() => {
           localStorage.removeItem("keyjinx_token");
-          sessionStorage.removeItem("keyjinx_vault_key"); // Wipe the memory key!
+        // Wipe the ephemeral vault key from memory to force re-authentication with the new key
+          sessionStorage.removeItem("keyjinx_vault_key");
           window.location.href = "login.html";
         }, 2000);
       } else {
         if (data.user.name) {
           $("val-name").innerText = data.user.name;
-          localStorage.setItem("keyjinx_user_name", data.user.name); // Update memory
+          localStorage.setItem("keyjinx_user_name", data.user.name); // Sync cached display name
         }
         if (data.user.email) {
           $("val-email").innerText = data.user.email;
-          localStorage.setItem("keyjinx_user_email", data.user.email); // Update fallback
+          localStorage.setItem("keyjinx_user_email", data.user.email); // Sync cached email fallback
         }
 
         showMsg(data.message, "success");
         toggleEdit(field);
 
-        // 🛠️ REFRESH HUD: Trigger a quick reload to re-render the navbar with the new name
+        // Trigger a brief reload to re-render the navbar with the updated profile name
         setTimeout(() => location.reload(), 1000);
       }
     } else {
@@ -169,7 +188,11 @@ window.saveField = async function (field) {
   }
 };
 
-// 4. Message System
+/**
+ * Inline Message Display
+ * Shows a dismissible status message below the edited field. Automatically
+ * hides after 4 seconds for non-critical notifications.
+ */
 function showMsg(text, type) {
   const box = $("msgBox");
   box.textContent = text;

@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
-
+/**
+ * @module Logs
+ * @description Mongoose schema for the centralized system audit log.
+ * Utilizes a Time-To-Live (TTL) index to automatically purge records older than 7 days,
+ * ensuring the database doesn't bloat with stale telemetry.
+ */
 const logSchema = new mongoose.Schema({
   type: {
     type: String,

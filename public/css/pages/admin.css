@@ -1,5 +1,8 @@
 /* ============================================================
-   [PAGE] MAINFRAME DASHBOARD UI
+   pages/admin.css | MAINFRAME DASHBOARD UI
+   Admin-only page styles for the real-time telemetry dashboard.
+   Provides a CSS grid layout system (.grid-2–5) for the metric
+   panels, log feed, inbox table, and user management controls.
    ============================================================ */
 .dash {
   padding: 20px;
@@ -28,6 +31,8 @@
   margin-bottom: 16px;
 }
 
+/* Pulsing indicator used next to the DB / server status labels.
+   .offline variant switches to pink and removes the animation. */
 .status-dot {
   width: 8px;
   height: 8px;
@@ -64,6 +69,8 @@
   color: rgb(var(--text-main-rgb));
 }
 
+/* Responsive CSS grid helpers: column count set explicitly for
+   5, 4, 3, 2-column metric panel layouts. */
 .grid-5 {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -101,6 +108,8 @@
   transform: translateY(-2px);
 }
 
+/* Accent bar colours: applied as a left border to visually
+   categorise metric cards (cyan = system, pink = security, purple = users). */
 .card-accent-cyan {
   border-left: 3px solid rgb(var(--jinx-cyan-rgb));
 }
@@ -151,6 +160,8 @@
   border-color: rgb(var(--jinx-pink-rgb));
 }
 
+/* Scrollable log feed with colour-coded event types:
+   .ev-ok = cyan (success), .ev-warn = amber, .ev-err = pink (critical). */
 .log-box {
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(var(--jinx-cyan-rgb), 0.15);
@@ -221,9 +232,46 @@
     0 100%,
     0 10px
   );
+  /* Hollow neon style: transparent fill, coloured border and text */
+  background: transparent;
+  border: 1px solid rgb(var(--jinx-purple-rgb));
+  color: rgb(var(--jinx-purple-rgb));
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
 }
+.btn-sm:hover {
+  color: rgb(var(--jinx-purple-rgb));
+  background: rgba(var(--jinx-purple-rgb), 0.15);
+  box-shadow: 0 0 10px rgba(var(--jinx-purple-rgb), 0.4);
+  transform: translateY(-1px);
+}
+
+/* DANGER variant — Purge & Demote: destructive / irreversible actions */
 .btn-sm.danger {
-  --btn-rgb: var(--jinx-purple-rgb);
+  border-color: rgb(var(--jinx-pink-rgb));
+  color: rgb(var(--jinx-pink-rgb));
+  background: transparent;
+}
+.btn-sm.danger:hover {
+  background: rgba(var(--jinx-pink-rgb), 0.15);
+  box-shadow: 0 0 10px rgba(var(--jinx-pink-rgb), 0.4);
+}
+
+/* PROMOTE variant — clearance elevation: distinct purple to avoid
+   confusion with the destructive pink danger buttons */
+.btn-sm.promote {
+  border-color: rgb(var(--jinx-purple-rgb));
+  color: rgb(var(--jinx-purple-rgb));
+  background: transparent;
+}
+.btn-sm.promote:hover {
+  background: rgba(var(--jinx-purple-rgb), 0.15);
+  box-shadow: 0 0 10px rgba(var(--jinx-purple-rgb), 0.4);
 }
 
 .section-title {
@@ -241,6 +289,7 @@
   height: 120px;
 }
 
+/* Horizontal gauge bar used for CPU/Memory utilisation displays */
 .gauge-row {
   display: flex;
   gap: 10px;
@@ -262,7 +311,8 @@
   box-shadow: 0 0 5px currentColor;
 }
 
-/* Modal Styles */
+/* Modal overlay: uses display:flex (set by JS) to centre the inner .modal-box.
+   backdrop-filter applies blur to the underlying dashboard content. */
 .modal-overlay {
   display: none;
   position: fixed;

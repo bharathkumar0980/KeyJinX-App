@@ -1,5 +1,8 @@
 /* ============================================================
-   [PAGE] HOME / LANDING
+   pages/home.css | HERO / LANDING PAGE
+   Styles the full-width .hero-panel, its animated signal line
+   (::before) and HUD status text (::after), and the hero
+   typography / button layout for the landing page.
    ============================================================ */
 .hero-panel {
   width: 100%;

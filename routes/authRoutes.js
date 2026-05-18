@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
+/**
+ * @module AuthRoutes
+ * @description Publicly accessible endpoints for operative authentication and credential recovery.
+ */
+
 const {
   registerUser,
   loginUser,

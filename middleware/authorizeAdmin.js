@@ -1,7 +1,10 @@
-// middleware/authorizeAdmin.js
-
+/**
+ * @module AuthorizeAdminMiddleware
+ * @description Enforces Role-Based Access Control (RBAC) specifically for root-level administrative routes.
+ * Must be executed sequentially AFTER authenticate.js, relying on the presence of req.user.
+ */
 module.exports = (req, res, next) => {
-    // This runs AFTER authenticate.js, so req.user is already available
+    // Validate that the authenticated user possesses the highest system clearance
     if (req.user && req.user.role === 'The Admin') {
         console.log(`🔓 Admin Access: ${req.user.email}`);
         next();

@@ -1,17 +1,20 @@
-/* =========================================
-   KEYJINX STYLESHEET MANIFEST
-   ========================================= */
+/* ============================================================
+   main.css | STYLESHEET MANIFEST & GLOBAL MOBILE PATCH
+   Entry point that imports all partials in cascade order.
+   The final @media block is a global mobile override that applies
+   across every page without being tied to a specific component.
+   ============================================================ */
 
-/* 1. Core Architecture */
+/* Core: design tokens → reset → layout (order is critical) */
 @import url("1-theme.css");
 @import url("2-base.css");
 @import url("3-layout.css");
 
-/* 2. Reusable Elements */
+/* Shared UI components and the effects/animation library */
 @import url("4-components.css");
 @import url("5-effects.css");
 
-/* 3. Page Specific Views */
+/* Page-specific overrides, loaded last so they win the cascade */
 @import url("pages/home.css");
 @import url("pages/auth.css");
 @import url("pages/vault.css");
@@ -19,11 +22,14 @@
 @import url("pages/profile.css");
 
 /* ============================================================
-   [6] UNIVERSAL MOBILE RESCUE PATCH (THE FINAL POLISH)
+   [6] UNIVERSAL MOBILE RESCUE PATCH
+   A single consolidated @media query that fixes layout issues
+   across all pages at breakpoints. Using !important throughout
+   because these rules must override deeply-nested component styles.
    ============================================================ */
 
 @media (max-width: 768px) {
-  /* 1. EXACT GEOMETRY PRESERVATION */
+  /* Preserve the shrapnel clip-path shape at mobile widths */
   .container,
   .hero-panel {
     clip-path: polygon(
@@ -65,7 +71,7 @@
     padding: 30px 15px 30px !important;
   }
 
-  /* 2. TYPOGRAPHY DIAL-DOWN */
+  /* Scale headings down to avoid overflow on narrow screens */
   .hero-heading .hero-brand {
     font-size: 2.3rem !important;
   }
@@ -93,7 +99,7 @@
     opacity: 0.85 !important;
   }
 
-  /* 3. NATIVE TOUCH TARGETS & FORM SPACING */
+  /* Increase touch targets to 48px minimum per WCAG guidelines */
   .form-group {
     margin-bottom: 22px !important;
   } /* Increased breathing room between inputs */
@@ -147,7 +153,7 @@
     margin: 0 !important;
   }
 
-  /* 4. VAULT TABLE REFINEMENT */
+  /* Remove clip-path and enable horizontal scroll for the vault table on small screens */
   .table-container {
     padding: 0 !important;
     border-radius: 8px !important;
@@ -185,7 +191,7 @@
     font-size: 1.1rem !important;
   }
 
-  /* 5. TEXT & IMAGE CIPHER REFINEMENT */
+  /* Give text areas more vertical room for typing on mobile */
   #rawText,
   #outputText {
     min-height: 180px !important; /* Gives more vertical space for typing on mobile */
@@ -196,7 +202,7 @@
     margin-top: 40px !important;
   }
 
-  /* 6. PROFILE PAGE REFINEMENT */
+  /* Stack the profile avatar vertically above the name on narrow viewports */
   .dossier-header {
     flex-direction: column !important; /* Stacks the avatar above the name */
     text-align: center !important;
@@ -222,7 +228,7 @@
     word-break: break-all !important;
   } /* Prevents long emails from breaking the box */
 
-  /* 7. DISABLE HOVER JITTERS */
+  /* Remove hover lift effects on touch devices to prevent jitter after tap */
   .container:hover,
   .hero-panel:hover,
   .feature-card:hover,

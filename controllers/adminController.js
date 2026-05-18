@@ -5,7 +5,11 @@ const Log = require("../models/Logs");
 const mongoose = require("mongoose");
 const os = require("os");
 
-// --- REAL CPU TRACKER ---
+/**
+ * Hardware Telemetry: Real CPU Tracker
+ * Calculates real-time CPU utilization by continuously polling OS-level timing data
+ * and computing the differential delta across a 2-second interval.
+ */
 let currentCPUUsage = 0;
 function calculateCPU() {
   const cpus = os.cpus();
@@ -25,7 +29,12 @@ setInterval(() => {
   startMeasure = endMeasure;
 }, 2000); 
 
-// --- API ENDPOINTS ---
+/**
+ * Retrieve System Statistics
+ * @route GET /api/admin/stats
+ * @description Aggregates comprehensive system vitals including user counts, vault sizes,
+ * database logical vs physical storage footprints, and recent intrusion metrics.
+ */
 exports.getSystemStats = async (req, res) => {
   try {
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
@@ -73,6 +82,11 @@ exports.getSystemStats = async (req, res) => {
   }
 };
 
+/**
+ * Retrieve Security Logs
+ * @route GET /api/admin/logs
+ * @description Fetches the 30 most recent chronological security/system events.
+ */
 exports.getLogs = async (req, res) => {
   try {
     const logs = await Log.find().sort({ createdAt: -1 }).limit(30);
@@ -82,6 +96,11 @@ exports.getLogs = async (req, res) => {
   }
 };
 
+/**
+ * Purge Transmission
+ * @route DELETE /api/admin/messages/:id
+ * @description Permanently deletes an encrypted contact transmission and logs the purge event.
+ */
 exports.deleteMessage = async (req, res) => {
   try {
     await Message.findByIdAndDelete(req.params.id);
@@ -92,6 +111,11 @@ exports.deleteMessage = async (req, res) => {
   }
 };
 
+/**
+ * Retrieve User Roster
+ * @route GET /api/admin/users
+ * @description Fetches all registered operatives (excluding password hashes) for IAM management.
+ */
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.find({}, "-password").sort({ createdAt: -1 });
@@ -101,6 +125,12 @@ exports.getUsers = async (req, res) => {
   }
 };
 
+/**
+ * Modify User Clearance
+ * @route PUT /api/admin/users/:id/role
+ * @description Overrides a user's system clearance level (e.g., Promote to Admin or Demote to Client).
+ * Triggers a security audit log detailing the action.
+ */
 exports.updateUserRole = async (req, res) => {
   try {
     const { role } = req.body;
@@ -122,6 +152,11 @@ exports.updateUserRole = async (req, res) => {
   }
 };
 
+/**
+ * Retrieve Encrypted Transmissions
+ * @route GET /api/admin/messages
+ * @description Fetches secure contact form submissions for administrator review.
+ */
 exports.getMessages = async (req, res) => {
   try {
     const messages = await Message.find().sort({ createdAt: -1 }).limit(50);
